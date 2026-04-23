@@ -1,0 +1,237 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Interval</title>
+<meta name="description" content="Interval is a gallery and project space in a 1790s Georgian townhouse at 73 Compton Street, Clerkenwell, London. Founded by father and son David and Jacob Gryn, dedicated to bringing leading contemporary artists together with historic artworks.">
+
+<!-- Open Graph / Social Sharing -->
+<meta property="og:type" content="website">
+<meta property="og:url" content="https://interval-clerkenwell.art">
+<meta property="og:title" content="Interval">
+<meta property="og:description" content="A gallery and project space in Clerkenwell pairing contemporary artists with historic works.">
+<meta property="og:image" content="https://interval-clerkenwell.art/social-preview.jpg">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+
+<!-- Twitter -->
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="Interval">
+<meta name="twitter:description" content="A gallery and project space in Clerkenwell pairing contemporary artists with historic works.">
+<meta name="twitter:image" content="https://interval-clerkenwell.art/social-preview.jpg">
+
+<!-- Favicon -->
+<link rel="icon" type="image/svg+xml" href="favicon.svg">
+<link rel="apple-touch-icon" href="favicon.svg">
+
+<meta name="color-scheme" content="light">
+<link rel="preconnect" href="https://use.typekit.net" crossorigin>
+<link rel="stylesheet" href="https://use.typekit.net/iap1ijt.css">
+<style>
+  *{box-sizing:border-box;margin:0;padding:0}
+  body{background:#faf8f3;color:#111;font:400 14px/1.5 "adobe-aldine",sans-serif;letter-spacing:.085em;-webkit-font-smoothing:antialiased}
+  a{color:inherit;text-decoration:none}
+  a:hover{opacity:.6}
+  img{display:block;max-width:100%;height:auto}
+  em{font-style:italic}
+  strong{font-weight:700}
+
+  header,main{max-width:1200px;margin:0 auto;padding:0 clamp(20px,4vw,48px)}
+  header{padding-top:clamp(24px,3vw,36px);padding-bottom:clamp(20px,3vw,40px);display:flex;justify-content:space-between;align-items:baseline;gap:24px;position:relative}
+  .brand{font-size:25px;letter-spacing:1px;font-family:"adobe-aldine",sans-serif;font-weight:400}
+  nav{display:flex;gap:clamp(18px,2.5vw,32px);font-size:13px;align-items:baseline}
+  nav>a,nav .dd>span{padding:4px 0}
+  nav .dd{position:relative}
+  nav .dd>span{cursor:pointer;display:inline-flex;align-items:center;gap:6px}
+  nav .dd>span::after{content:"";width:5px;height:5px;border-right:1px solid currentColor;border-bottom:1px solid currentColor;transform:rotate(45deg) translateY(-2px);transition:transform .25s ease;opacity:.6}
+  nav .dd:hover>span::after,nav .dd.open>span::after{transform:rotate(-135deg) translateY(1px);opacity:1}
+  nav .dd ul{position:absolute;top:calc(100% + 6px);left:-14px;background:#faf8f3;padding:10px 0;list-style:none;min-width:140px;z-index:20;opacity:0;visibility:hidden;transform:translateY(-4px);transition:opacity .2s ease,transform .2s ease,visibility .2s;box-shadow:0 1px 0 rgba(0,0,0,.06),0 8px 24px rgba(0,0,0,.06)}
+  nav .dd:hover ul,nav .dd.open ul{opacity:1;visibility:visible;transform:none}
+  nav .dd li a{display:block;padding:7px 18px;font-size:12px}
+  nav .dd li a:hover{background:#f2eee5;opacity:1}
+  #m{display:none;background:none;border:0;font:inherit;letter-spacing:.085em;cursor:pointer;color:inherit}
+
+  @media(max-width:720px){
+    nav{position:fixed;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:28px;background:#faf8f3;z-index:40;font-size:18px;opacity:0;visibility:hidden;transition:opacity .3s ease,visibility .3s}
+    nav.open{opacity:1;visibility:visible}
+    nav>a,nav .dd>span{padding:0}
+    nav .dd{display:flex;flex-direction:column;align-items:center;gap:0}
+    nav .dd>span{justify-content:center}
+    nav .dd>span::after{display:none}
+    nav .dd ul{position:static;opacity:1;visibility:visible;transform:none;box-shadow:none;background:transparent;padding:0;min-width:0;list-style:none;display:flex;flex-direction:column;align-items:center;gap:14px;max-height:0;overflow:hidden;transition:max-height .3s ease;text-align:center}
+    nav .dd.open ul{max-height:200px;margin-top:14px}
+    nav .dd li a{padding:0;font-size:14px;color:#666}
+    nav .dd li a:hover{background:none;opacity:1}
+    #m{display:block;position:relative;z-index:50}
+    header.open #m::before{content:"Close";position:absolute;inset:0;background:#faf8f3;display:flex;align-items:center;justify-content:flex-end;letter-spacing:.085em}
+  }
+
+  main{padding-bottom:clamp(60px,8vw,120px)}
+  article{max-width:540px;margin:0 auto}
+  article img{width:100%;margin-bottom:20px}
+  article h1{font-size:13px;font-weight:400;line-height:1.6;margin-bottom:24px}
+  article p{font-size:13px;line-height:1.6;margin-bottom:16px;text-align:justify;hyphens:auto}
+  article .req{display:inline-block;margin-bottom:28px;border-bottom:1px solid #111;padding-bottom:2px}
+  article .cap{font-size:13px;line-height:1.5}
+  [data-page="home"] .hero-img{display:block;width:100%;max-width:720px;margin:clamp(20px,3vw,40px) auto clamp(20px,3vw,32px)}
+  [data-page="home"] .hero-img img{width:100%;height:auto;display:block}
+  [data-page="home"] .hero-cap{text-align:center;font-size:clamp(12px,1.5vw,14px);line-height:2.2;max-width:720px;margin:0 auto}
+  [data-page="home"] .ml{display:block;text-align:center;margin:clamp(48px,8vw,96px) auto 0;font-size:13px;color:#111;text-decoration:underline;text-underline-offset:4px}
+  .list{max-width:540px;margin:0 auto;display:flex;flex-direction:column;gap:clamp(40px,5vw,60px)}
+  .list a img{width:100%;margin-bottom:14px}
+  .list a div{font-size:13px;line-height:1.5}
+  .about h1{font-weight:400}
+  .contact{text-align:center;max-width:640px;margin:clamp(60px,10vw,140px) auto 0}
+  .contact p{font-size:17px;line-height:1.5;margin-bottom:clamp(20px,2.5vw,28px);letter-spacing:.05em}
+  .contact a{border-bottom:0}
+  .contact p:has(a[href*="first-thursday"]) a{text-decoration:underline;text-underline-offset:4px}
+  .contact-img{max-width:480px;margin:clamp(32px,5vw,56px) auto 0;width:100%}
+
+  [data-page]{display:none}
+  [data-page].on{display:block}
+</style>
+</head>
+<body>
+
+<header>
+  <a href="#home" class="brand">Interval</a>
+  <button id="m" aria-label="Menu">Menu</button>
+  <nav id="n">
+    <div class="dd"><span>Exhibitions</span>
+      <ul>
+        <li><a href="#scenes">Current</a></li>
+        <li><a href="#upcoming">Upcoming</a></li>
+        <li><a href="#past">Past</a></li>
+      </ul>
+    </div>
+    <a href="#about">About</a>
+    <a href="#contact">Contact</a>
+  </nav>
+</header>
+
+<main>
+
+<section data-page="home" class="on">
+  <a href="#scenes" class="hero-img">
+    <img src="https://cdn.prod.website-files.com/67cb375ebc7af1d35e4aee61/69d64441496a15a719b4c6ce_Interval_Ref-7339-49.jpg" alt="Simon Moretti: Scenes from a Divided Subject">
+  </a>
+  <div class="hero-cap">
+    Simon Moretti: Scenes from a Divided Subject<br>
+    11th April – 16th May 2026
+  </div>
+  <a href="https://gallery.first-thursday.com/interval" target="_blank" rel="noopener" class="ml">Join our Mailing List</a>
+</section>
+
+<article data-page="scenes">
+  <h1>Simon Moretti: Scenes from a Divided Subject<br>11th April – 16th May 2026</h1>
+  <img src="https://cdn.prod.website-files.com/67cb375ebc7af1d35e4aee61/69c10bf915c54f899d6f09d6_The%20Fertile%20i%2C%20Simon%20Moretti%2C%202026.jpg" alt="The Fertile i, Simon Moretti, 2026">
+  <a href="mailto:jacob@interval-clerkenwell.art?subject=Scenes%20from%20a%20Divided%20Subject%20-%20Preview%20Request" class="req">Request preview</a>
+  <p>Simon Moretti: Scenes from a Divided Subject, featuring Paul Éluard, Pablo Picasso and Joel Wyllie.</p>
+  <p>"The I is always in the field of the other" – Jacques Lacan, Seminar XI, <em>The Four Fundamental Concepts of Psychoanalysis</em> (1964)</p>
+  <p>Scenes from a Divided Subject is an exhibition by Simon Moretti that engages with the writings and theories of French psychoanalyst Jacques Lacan, drawing in particular on his concept of the three orders: the Imaginary, the Symbolic, and the Real.</p>
+  <p>At the centre of the installation stands a large plinth on which three distinct objects are arranged in constellation, bringing image, power, and material presence into contact with one another. Rather than following the conventions of a traditional museum display, this grouping presents them as a single sculptural work whose significance shifts through proximity and contrast.</p>
+  <p>The first object is a late Gothic carved wood sculpture depicting the Coronation of the Virgin c. 1500. Beside it rests a queen helmet shell (<em>Cassis madagascariensis</em>), its form at once organic and architectural. The third object is a North German close helmet for field use, Brunswick c. 1560-70.</p>
+  <p>These objects are presented alongside Moretti's signature neons, together with <em>Grand Air (Les Yeux Fertiles)</em> 1936, a collaborative Surrealist etching by Pablo Picasso and Paul Éluard, and a drawing from Joel Wyllie's <em>Shedding Pictures</em> series.</p>
+  <p><strong>Simon Moretti</strong> is an artist based in London. His work deals with psychoanalytical and philosophical concepts through context and display, the use of appropriated images, archives, curatorial and publishing projects. Recent exhibitions include <em>Hereafter</em>, The Swedenborg Society, London (2025); <em>The Enigma of the Hour</em>, with Goshka Macuga, Freud Museum, London (2019); and <em>The Camera Exposed</em>, Victoria & Albert Museum, London (2016).</p>
+  <p>Special thanks to Mullany Haute Epoque Fine Art and Sims Reed London.</p>
+  <p>Contact – <a href="mailto:jacob@interval-clerkenwell.art">jacob@interval-clerkenwell.art</a> for all enquiries.</p>
+</article>
+
+<article data-page="gracepoint">
+  <h1>Petra Cortright: "gracePOINT" - Independent Art Fair 2026<br>14th – 17th May 2026</h1>
+  <img src="gracepoint.jpg" alt="Petra Cortright, PHOTONIC_ARRAY 7th_Guest music_midi_sequence 74HC_logic_trace_sch, 2026">
+  <p>Interval's presentation at Independent Art Fair, New York.</p>
+  <a href="mailto:jacob@interval-clerkenwell.art?subject=gracePOINT%20-%20Preview%20Request" class="req">Request preview</a>
+  <p>"gracePOINT" by LA-based artist Petra Cortright, features new digital paintings on aluminium alongside a video. These new artworks are created in response to old master artworks from the 17th and 18th Century, as well as various medieval Book of Hours manuscript leaves, as well as Cortright's passion for roses and the flora and fauna of her native California.</p>
+  <p>Petra Cortright's rich and beautifully formed artworks were created in response to the consigned works for the inaugural show from Interval's old master gallery collaborators Rafael Valls and Sam Fogg, featuring 17th and 18th century Dutch and Spanish floral still life paintings by Jan Van Os, José de Arrelano, alongside several 15th century Book of Hours manuscript leaves. The relationship between Petra Cortright's and the old master works shows an amazing connection and parity between art made in different times and that the language of art making is both continuous and also ever-evolving with the development of new techniques and digital mediums.</p>
+  <p><strong>Petra Cortright</strong> (b.1986, Santa Barbara, California) is a Los Angeles based artist whose practice spans digital painting, video and online culture. Over the last 15 years Petra has been working in the format of digital painting. A unique process comprised of working with reference imagery that is then scanned and expanded pixel by pixel, mixed with brush strokes and other source imagery to create paintings with hundreds of layers. Cortright then works closely with a master printer in Brooklyn to layer these onto her various materials (aluminium, canvas, wood, etc). Petra is one of the most highly recognised digital and video artists of her generation.</p>
+  <p>Her work has been exhibited internationally at many leading institutions including: Palm Springs Art Museum, Doota Plaza Seoul, LIMA, UTA Artist Space, University of Edinburgh, Depart Foundation LA, MoMA, Hammer Museum, Ludwig Museum Budapest, Walker Art Center, Halle für Kunst & Medien Graz, Museum of Contemporary Art Chicago, Kunsthaus Langenthal, New Museum, 12th Biennale de Lyon, SJ01 Biennial San Jose, Whitechapel Gallery London, Zeughaus Teufen Switzerland, Frieze London, Art Basel's Unlimited and Parcours, and the Venice Biennale.</p>
+  <p>Public collections include: The Bass Museum of Art, Berkeley Art Museum and Pacific Film Archive, Crystal Bridges Museum of American Art, Denver Art Museum, Getty Research Institute, Hammer Museum, Kadist Foundation, The Knoxville Museum of Art, LACMA, Moderna Museet Stockholm, MoMA, Museum of Contemporary Art Chicago, MOCA LA, Stedelijk Museum, Pérez Art Museum, Rhizome Net Art Anthology, San Jose Museum of Art, and Santa Barbara Museum of Art.</p>
+  <p>Notable solo gallery exhibitions include: Team Gallery (New York), Société (Berlin), Carl Kostyál (London and Stockholm), Ever Gold [Projects] (San Francisco), Foxy Production (New York), Interval (London), 1301PE (LA), Brigade Gallery (Copenhagen), Duarte Sequeira (Braga, Portugal), von ammon co. (Washington D.C.), Danziger Gallery (New York), and online with Verse, Vortic and Daata, The Bass Museum (Miami) and Jodhpur Art Week (India).</p>
+  <p>Petra Cortright was the launch artist for the inaugural exhibition "NOBLEcurve" at Interval in 2025.</p>
+  <p>Contact – <a href="mailto:jacob@interval-clerkenwell.art">jacob@interval-clerkenwell.art</a> for all enquiries.</p>
+</article>
+
+<article data-page="lustre">
+  <h1>Lustre: Sebastián Espejo & Pierre Bonnard<br>24th January – 28th March 2026</h1>
+  <img src="https://cdn.prod.website-files.com/67cb375ebc7af1d35e4aee61/695d41ccaeec5d105169e3d7_EspejoSebastian_RocasEnElMar%2C2025_OilOnBirchWoodPanel_40.6x30.5cm.jpg.jpg" alt="Rocas en el Mar, Sebastián Espejo">
+  <a href="mailto:jacob@interval-clerkenwell.art?subject=Lustre%20-%20Preview%20Request" class="req">Request preview</a>
+  <p>Lustre, an exhibition by London-based painter Sebastián Espejo (b.1990, Chile), presented alongside works by Pierre Bonnard. As well as Japanese woodblock prints by Hokusai and Hiroshige, artists that both Espejo and Bonnard frequently reference.</p>
+  <p><strong>Sebastián Espejo</strong> (b. 1990) is a Chilean artist based in London, whose practice centres on painting with a focus on exploring the language of the natural world, still lives and the perception of light. Espejo often directly references the historic work of his influences. He has exhibited internationally across the UK, Europe, Asia, and the Americas. In 2025, he had a residency at Drumlanrig Castle and has been selected for Fugger Kunsthof residency in Augsburg.</p>
+  <p>In Espejo's quiet and poetic work, one immediately recalls the techniques, aesthetics and mark making of his historic artist influences, aligning with the ethos of Interval.</p>
+  <p>An essay on <em>Lustre: Sebastián Espejo and Pierre Bonnard</em> by <strong>Luis Pérez-Oramas</strong>, a Venezuelan art historian and poet who served as Curator of Latin American Art at New York's Museum of Modern Art (MoMA) from 2006 to 2017, will be accompanying the exhibition.</p>
+  <p><strong>Pierre Bonnard</strong> (1867-1947) Born into a bourgeois family in Fontenay-aux-Roses, near Paris. In late 1888 Bonnard, Sérusier, Maurice Denis, Édouard Vuillard and others formed the Nabis, an artistic brotherhood based on Gauguin's theories. Art critics of the period dubbed Bonnard and Vuillard "Intimists," because many of their pictures depicted intimate scenes in interior settings.</p>
+  <p><strong>Wildenstein & Co.</strong> is a private art dealership established in 1875, with an emphasis on Old Masters and Impressionists.</p>
+  <p>Special thanks to the <strong>Kentoni Collection</strong> for the loan of the Katsushika Hokusai and Utagawa Hiroshige Japanese woodblock prints.</p>
+  <p>Contact – <a href="mailto:jacob@interval-clerkenwell.art">jacob@interval-clerkenwell.art</a> for all enquiries.</p>
+</article>
+
+<article data-page="noblecurve">
+  <h1>"NOBLEcurve" featuring Petra Cortright<br>27 September – 20 December 2025</h1>
+  <img src="https://cdn.prod.website-files.com/67cb375ebc7af1d35e4aee61/68daae749f3e7cc7d1ddc7e5_Interval_Ref-0051.jpg" alt="NOBLEcurve installation">
+  <p>Interval's inaugural exhibition: new digital paintings by LA-based artist Petra Cortright, presented alongside Old Master works in collaboration with Sam Fogg and Rafael Valls Gallery.</p>
+  <p>For the gallery's opening presentation, Cortright produced a new body of work made specifically for the show. Taking source imagery from the historic works on view, she layered and printed each painting on anodized aluminium, responding directly to the objects they hang alongside.</p>
+  <p>Contact – <a href="mailto:jacob@interval-clerkenwell.art">jacob@interval-clerkenwell.art</a> for all enquiries.</p>
+</article>
+
+<section data-page="upcoming">
+  <div class="list">
+    <a href="#gracepoint">
+      <img src="gracepoint.jpg" alt="Petra Cortright: gracePOINT">
+      <div>Petra Cortright: "gracePOINT" - Independent Art Fair 2026<br>14th – 17th May 2026</div>
+    </a>
+  </div>
+</section>
+
+<section data-page="past">
+  <div class="list">
+    <a href="#lustre">
+      <img src="https://cdn.prod.website-files.com/67cb375ebc7af1d35e4aee61/69738ff43f0dad6762fca4cd_Interval_Ref-2217-20.jpg" alt="Lustre">
+      <div>Lustre: Sebastián Espejo and Pierre Bonnard<br>24th January – 28th March 2026</div>
+    </a>
+    <a href="#noblecurve">
+      <img src="https://cdn.prod.website-files.com/67cb375ebc7af1d35e4aee61/68daae749f3e7cc7d1ddc7e5_Interval_Ref-0051.jpg" alt="NOBLEcurve">
+      <div>"NOBLEcurve" featuring Petra Cortright<br>27 September – 20 December 2025</div>
+    </a>
+  </div>
+</section>
+
+<article data-page="about" class="about">
+  <img src="https://cdn.prod.website-files.com/67cb375ebc7af1d35e4aee61/691f386a98b725427f3d4f63_DAVID%20N%20JACOB%20.jpg" alt="David and Jacob Gryn">
+  <h1>About us</h1>
+  <p>Interval is a gallery and project space in a 1790s Georgian townhouse at 73 Compton Street, Clerkenwell. The gallery opened in September 2025 after six months of renovation.</p>
+  <p>The idea behind Interval is a simple one. Every exhibition pairs a contemporary artist with historic works, so a new digital painting might hang alongside a 17th century still life, or a neon installation sit next to a medieval manuscript leaf. This way of looking at art, where the threads connecting one era to another are made visible in a single room, sits at the heart of the programme.</p>
+  <p>The gallery is run by <strong>Jacob Gryn</strong>, who works internationally with contemporary artists, galleries and collectors, and his father <strong>David Gryn</strong>, a curator with over twenty five years in contemporary moving image, film and digital media. David founded Artprojx and later Daata, and was the curator of film and sound at Art Basel in Miami Beach from 2010 to 2017.</p>
+  <p>Interval does not formally represent artists, which gives the gallery a certain freedom in how exhibitions are built and who it chooses to work with. Alongside the exhibition programme, Interval offers advisory and consulting services, working with collectors, institutions and estates on acquisitions, sales and curatorial projects across both the contemporary and historic markets.</p>
+  <p>For any enquiries, or to visit the space, please get in touch at <a href="mailto:jacob@interval-clerkenwell.art">jacob@interval-clerkenwell.art</a>.</p>
+</article>
+
+<article data-page="contact" class="contact">
+  <p>Interval<br>73 Compton Street<br>London, EC1V 0BN</p>
+  <p>Wed - Sat 12pm-6pm<br>(or by appointment)</p>
+  <p><a href="mailto:info@interval-clerkenwell.art">info@interval-clerkenwell.art</a></p>
+  <p>T. <a href="tel:+447711127848">+447711127848</a></p>
+  <p><a href="https://gallery.first-thursday.com/interval" target="_blank" rel="noopener">Join our Mailing List</a></p>
+  <img class="contact-img" src="https://cdn.prod.website-files.com/67cb375ebc7af1d35e4aee61/68daae7866a00430c8ee4f92_Interval_Ref-0014.jpg" alt="">
+</article>
+
+</main>
+
+<script>
+  const h=document.querySelector('header');
+  const close=()=>{n.classList.remove('open');h.classList.remove('open')};
+  const go=()=>{
+    const k=location.hash.slice(1)||'home';
+    document.querySelectorAll('[data-page]').forEach(p=>p.classList.toggle('on',p.dataset.page===k));
+    scrollTo(0,0);
+    close();
+  };
+  addEventListener('hashchange',go);
+  addEventListener('DOMContentLoaded',go);
+  m.onclick=e=>{e.stopPropagation();n.classList.toggle('open');h.classList.toggle('open')};
+  document.querySelectorAll('.dd>span').forEach(s=>s.onclick=e=>{if(innerWidth<=720){e.stopPropagation();s.parentElement.classList.toggle('open')}});
+  document.addEventListener('click',e=>{if(!h.contains(e.target))close()});
+</script>
+</body>
+</html>
