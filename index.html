@@ -88,8 +88,39 @@
   article.contact{max-width:none;text-align:center;margin:clamp(20px,3vw,40px) auto 0;padding:0}
   .contact p{font-size:13px;line-height:1.6;margin-bottom:clamp(20px,2.5vw,28px);text-align:center;hyphens:none}
   .contact a{border-bottom:0}
-  .contact p:has(a[href*="first-thursday"]) a{text-decoration:underline;text-underline-offset:4px}
+  .contact p:has(a[href="#mailing-list"]) a{text-decoration:underline;text-underline-offset:4px}
   .contact-img{max-width:480px;margin:clamp(20px,3vw,32px) auto 0;width:100%;display:block}
+
+  /* One measure for the whole page, the same 480 the contact picture
+     uses, so the form, the photograph and the note share their edges. */
+  article.signup{max-width:480px;margin:clamp(20px,3vw,40px) auto 0}
+  .signup h1{text-align:center;margin-bottom:clamp(30px,4vw,42px)}
+  .signup .field{margin-bottom:24px}
+  .signup label{display:block;font-size:10px;letter-spacing:.16em;text-transform:uppercase;color:#6b6760;margin-bottom:7px}
+  .signup label .opt{text-transform:none;letter-spacing:.085em;font-size:11px}
+  .signup input[type=text],.signup input[type=email],.signup input[type=tel]{width:100%;font:inherit;letter-spacing:.085em;color:#111;background:none;border:0;border-bottom:1px solid #948e82;border-radius:0;padding:7px 0}
+  .signup input:focus{outline:none;border-bottom-color:#111;border-bottom-width:1px}
+  .signup input::placeholder{color:#a39e93;opacity:1}
+  .signup .tick{display:flex;gap:11px;align-items:flex-start;margin:32px 0 28px;font-size:12px;line-height:1.6;letter-spacing:.05em;color:#111;text-transform:none;cursor:pointer}
+  .signup .tick input{flex:0 0 auto;margin-top:2px;width:15px;height:15px;accent-color:#111}
+  .signup button{font:inherit;letter-spacing:.085em;font-size:13px;color:#111;background:none;border:1px solid #111;padding:13px 30px;cursor:pointer}
+  .signup button:hover{background:#111;color:#faf8f3}
+  .signup button[disabled]{opacity:.45;cursor:default}
+  .signup button[disabled]:hover{background:none;color:#111}
+  .signup .msg{font-size:12px;line-height:1.6;margin-top:16px}
+  .signup .msg.bad{color:#8a2b1f}
+  /* The heading above already provides the space, so this only needs a
+     little of its own or the thank-you floats in a void. */
+  .signup .done{text-align:center;font-size:13px;line-height:1.9;padding:2px 0 10px}
+  .signup .done:focus{outline:none}
+  .signup img{margin:clamp(40px,5vw,52px) 0 0}
+  .signup .note{font-size:11px;line-height:1.8;color:#6b6760;margin-top:clamp(28px,3.5vw,38px);text-align:left;hyphens:none}
+  .signup .hp{position:absolute;left:-9999px;width:1px;height:1px;overflow:hidden}
+  /* iOS Safari zooms in on a focused input under 16px and never zooms
+     back out, and a 44px target is the smallest a thumb reliably hits. */
+  @media(max-width:760px){
+    .signup input[type=text],.signup input[type=email],.signup input[type=tel]{font-size:16px;padding:10px 0}
+  }
 
   [data-page]{display:none}
   [data-page].on{display:block}
@@ -102,7 +133,7 @@
   .lb-prev,.lb-next{top:50%;transform:translateY(-50%);font-size:40px;padding:10px 16px}
   .lb-prev{left:6px}.lb-next{right:6px}
   .lb-count{position:absolute;bottom:22px;left:0;right:0;text-align:center;color:#faf8f3;font-size:12px;letter-spacing:.12em;opacity:.7;font-family:inherit}
-  main article:not(.contact):not(.about) img{cursor:zoom-in}
+  main article:not(.contact):not(.about):not(.signup) img{cursor:zoom-in}
 </style>
 </head>
 <body>
@@ -133,7 +164,7 @@
     Interval One: Scarlet Topley and Ed Ruscha<br>
     18th July – 5th September 2026
   </div>
-  <a href="https://gallery.first-thursday.com/interval" target="_blank" rel="noopener" class="ml">Join our Mailing List</a>
+  <a href="#mailing-list" class="ml">Join our Mailing List</a>
 </section>
 
 <article data-page="interval-one">
@@ -324,8 +355,58 @@
   <p>Wed - Sat 12pm-6pm<br>(or by appointment)</p>
   <p><a href="mailto:info@interval-clerkenwell.art">info@interval-clerkenwell.art</a></p>
   <p>T. <a href="tel:+447711127848">+447711127848</a></p>
-  <p><a href="https://gallery.first-thursday.com/interval" target="_blank" rel="noopener">Join our Mailing List</a></p>
+  <p><a href="#mailing-list">Join our Mailing List</a></p>
   <img class="contact-img" src="assets/site/still-life-with-flowers.jpg" alt="">
+</article>
+
+<article data-page="mailing-list" class="signup">
+  <h1>Join our mailing list</h1>
+
+  <form id="ml-form" novalidate>
+    <div class="field">
+      <label for="ml-first">First name</label>
+      <input id="ml-first" name="firstName" type="text" autocomplete="given-name" maxlength="80">
+    </div>
+    <div class="field">
+      <label for="ml-last">Surname</label>
+      <input id="ml-last" name="lastName" type="text" autocomplete="family-name" maxlength="80">
+    </div>
+    <div class="field">
+      <label for="ml-email">Email address</label>
+      <input id="ml-email" name="email" type="email" autocomplete="email" maxlength="120" required>
+    </div>
+    <div class="field">
+      <label for="ml-phone">Telephone <span class="opt">(optional)</span></label>
+      <input id="ml-phone" name="phone" type="tel" autocomplete="tel" maxlength="40" placeholder="+44 7700 900123">
+    </div>
+    <div class="field">
+      <label for="ml-based">Based in <span class="opt">(optional)</span></label>
+      <input id="ml-based" name="basedIn" type="text" autocomplete="address-level2" maxlength="80" placeholder="London">
+    </div>
+
+    <!-- Left empty by a person, filled in by a form-filling script. Named
+         so that no browser autofill heuristic recognises it: a field
+         called "company" or "phone" gets filled for real people, who
+         would then be turned away. -->
+    <div class="hp" aria-hidden="true">
+      <label for="ml-xtra">Leave this field empty</label>
+      <input id="ml-xtra" name="xtra" type="text" tabindex="-1" autocomplete="off">
+    </div>
+
+    <!-- The input sits inside the label, which is association enough. A
+         "for" as well makes some browsers toggle twice on one click. -->
+    <label class="tick">
+      <input id="ml-consent" type="checkbox">
+      <span>Yes, please add me to the Interval mailing list. I understand I can unsubscribe at any time by replying to any email from the gallery.</span>
+    </label>
+
+    <button id="ml-go" type="submit">Join the list</button>
+    <div class="msg" id="ml-msg" role="status" aria-live="polite"></div>
+  </form>
+
+  <img src="assets/exhibitions/interval-one/interval-one-11.jpg" alt="The lower gallery at 73 Compton Street">
+
+  <p class="note">Interval Clerkenwell Ltd is the controller of the details you give here. We use them only to send you news from the gallery. Ask to be removed at any time by replying to any email from us, or by writing to <a href="mailto:info@interval-clerkenwell.art">info@interval-clerkenwell.art</a>.</p>
 </article>
 
 </main>
@@ -367,9 +448,72 @@
   ov.addEventListener('touchend',function(e){if(x0==null)return;var dx=e.changedTouches[0].clientX-x0;if(Math.abs(dx)>40)show(dx<0?idx+1:idx-1);x0=null;});
   document.addEventListener('click',function(e){
     var img=e.target.closest&&e.target.closest('article img');if(!img)return;
-    var art=img.closest('article');if(!art||art.classList.contains('contact')||art.classList.contains('about'))return;
+    var art=img.closest('article');if(!art||art.classList.contains('contact')||art.classList.contains('about')||art.classList.contains('signup'))return;
     var imgs=Array.prototype.slice.call(art.querySelectorAll('img'));
     open(imgs.map(function(n){return {src:n.currentSrc||n.getAttribute('src'),alt:n.alt};}),imgs.indexOf(img));
+  });
+})();
+</script>
+<script>
+/* The mailing list form. It posts to the gallery's own contacts
+   database at interval-desk.netlify.app, which is a separate site, so
+   this is a cross-origin request and that endpoint names this domain
+   in its allowed list. Nothing secret is held here: the endpoint only
+   ever adds, and cannot read anything back. */
+(function(){
+  var form=document.getElementById('ml-form');if(!form)return;
+  var ENDPOINT='https://interval-desk.netlify.app/api/signup';
+  /* How long the form was open. A script that loads the page and fires
+     immediately looks nothing like a person typing their address. */
+  var opened=Date.now();
+  var msg=document.getElementById('ml-msg'),go=document.getElementById('ml-go');
+  var val=function(id){return (document.getElementById(id).value||'').trim();};
+  /* Put the cursor on whatever needs fixing, so nobody has to hunt back
+     up the form for it. */
+  function fail(text,id){
+    msg.className='msg bad';msg.textContent=text;
+    var el=id&&document.getElementById(id);if(el)el.focus();
+  }
+
+  form.addEventListener('submit',function(e){
+    e.preventDefault();
+    if(!val('ml-email'))return fail('Please enter your email address.','ml-email');
+    if(!document.getElementById('ml-consent').checked){
+      return fail('Please tick the box to confirm you would like to hear from us.','ml-consent');
+    }
+    go.disabled=true;msg.className='msg';msg.textContent='Sending…';
+
+    fetch(ENDPOINT,{
+      method:'POST',
+      headers:{'content-type':'application/json'},
+      body:JSON.stringify({
+        firstName:val('ml-first'),
+        lastName:val('ml-last'),
+        email:val('ml-email'),
+        phone:val('ml-phone'),
+        basedIn:val('ml-based'),
+        xtra:val('ml-xtra'),
+        consent:true,
+        t:Date.now()-opened
+      })
+    }).then(function(r){
+      return r.json().catch(function(){return {};}).then(function(d){return {ok:r.ok,body:d};});
+    }).then(function(res){
+      if(!res.ok||!res.body.ok){
+        go.disabled=false;
+        /* A telephone is the only field the server can turn down on its
+           own, so send them back to it. */
+        return fail(res.body.error||'Something went wrong. Please try again, or email info@interval-clerkenwell.art.',
+          /telephone/i.test(res.body.error||'')?'ml-phone':null);
+      }
+      form.innerHTML='<div class="done" tabindex="-1">Thank you, you are on the list.<br>We will write with news of what is coming up.</div>';
+      /* Moving focus to the thank-you is what tells a screen reader the
+         form is done, since the live region went with the form. */
+      form.querySelector('.done').focus();
+    })['catch'](function(){
+      go.disabled=false;
+      fail('We could not reach the gallery just now. Please try again, or email info@interval-clerkenwell.art.');
+    });
   });
 })();
 </script>
