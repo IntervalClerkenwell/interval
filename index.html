@@ -122,6 +122,22 @@
     .signup input[type=text],.signup input[type=email],.signup input[type=tel]{font-size:16px;padding:10px 0}
   }
 
+  /* Events. Unlike an exhibition, an event is not written into this
+     file: it is kept in the gallery's own desk, along with the replies,
+     and this page asks for it. The form below reuses the mailing list
+     form's styles, which also keeps it out of the lightbox. */
+  .ev-none{max-width:540px;margin:0 auto;font-size:13px;line-height:1.6;text-align:center;color:#6b6760}
+  .list .ev-when{color:#6b6760}
+  article.signup.event{max-width:540px}
+  /* Left, like an exhibition's, not centred like the mailing list's. */
+  .event h1{margin-bottom:20px;text-align:left}
+  .event .ev-where{font-size:13px;line-height:1.6;color:#6b6760;margin-bottom:24px}
+  .event .ev-rsvp{border-top:1px solid #d9d4c8;margin-top:clamp(34px,4vw,44px);padding-top:clamp(30px,4vw,38px);max-width:480px}
+  .event .ev-rsvp h2{font-size:10px;font-weight:400;letter-spacing:.16em;text-transform:uppercase;color:#6b6760;margin-bottom:26px}
+  .event .ev-guest{border-left:1px solid #d9d4c8;padding-left:18px;margin:0 0 24px}
+  .event .ev-shut{font-size:13px;line-height:1.7}
+  .event .terms{font-size:11px;line-height:1.8;color:#6b6760;margin:22px 0 26px;hyphens:none}
+
   [data-page]{display:none}
   [data-page].on{display:block}
   .lb-overlay{position:fixed;inset:0;background:rgba(17,17,17,.94);display:none;align-items:center;justify-content:center;z-index:1000}
@@ -147,6 +163,7 @@
         <li><a href="#interval-one">Current</a></li>
         <li><a href="#upcoming">Upcoming</a></li>
         <li><a href="#past">Past</a></li>
+        <li><a href="#events">Events</a></li>
       </ul>
     </div>
     <a href="#about">About</a>
@@ -340,6 +357,12 @@
   </div>
 </section>
 
+<section data-page="events">
+  <div class="list" id="ev-list"></div>
+</section>
+
+<article data-page="event" class="signup event" id="ev-page"></article>
+
 <article data-page="about" class="about">
   <img src="assets/site/gryn-portrait.jpg" alt="David and Jacob Gryn">
   <h1>About us</h1>
@@ -415,8 +438,11 @@
   const h=document.querySelector('header');
   const close=()=>{n.classList.remove('open');h.classList.remove('open')};
   const go=()=>{
-    const k=location.hash.slice(1)||'home';
+    const h=location.hash.slice(1)||'home';
+    /* One page serves every event, filled in from its address. */
+    const k=h.indexOf('event-')===0?'event':h;
     document.querySelectorAll('[data-page]').forEach(p=>p.classList.toggle('on',p.dataset.page===k));
+    if(window.__events)window.__events(h);
     scrollTo(0,0);
     close();
   };
@@ -515,6 +541,201 @@
       fail('We could not reach the gallery just now. Please try again, or email info@interval-clerkenwell.art.');
     });
   });
+})();
+</script>
+<script>
+/* Events and their RSVPs. The list is not in this file: it is fetched
+   from the gallery's desk at interval-desk.netlify.app, which is where
+   the event is written and where the replies land. That keeps an event,
+   which comes and goes in a fortnight, out of the site's own history,
+   and means one place holds both the invitation and the guest list.
+
+   Nothing secret is here. The list endpoint returns only what is meant
+   to be on the page, and the RSVP endpoint only ever adds. */
+(function(){
+  var LIST='https://interval-desk.netlify.app/api/events/public';
+  var DESK='https://interval-desk.netlify.app';
+  var events=null, asked=null;
+
+  var esc=function(s){return String(s==null?'':s)
+    .replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;')
+    .replace(/"/g,'&quot;').replace(/'/g,'&#39;');};
+  var el=function(id){return document.getElementById(id);};
+  var paras=function(t){
+    return String(t||'').split(/\n\s*\n/).map(function(x){return x.trim();})
+      .filter(Boolean).map(function(x){return '<p>'+esc(x).replace(/\n/g,'<br>')+'</p>';}).join('');
+  };
+
+  /* Asked for once and kept, so moving between the list and an event
+     does not fetch again. */
+  function load(){
+    if(asked) return asked;
+    asked=fetch(LIST,{headers:{'accept':'application/json'}})
+      .then(function(r){ if(!r.ok) throw new Error('no'); return r.json(); })
+      .then(function(d){ events=(d&&d.events)||[]; return events; });
+    return asked;
+  }
+
+  function find(slug){
+    for(var i=0;i<(events||[]).length;i++) if(events[i].slug===slug) return events[i];
+    return null;
+  }
+
+  function renderList(){
+    var box=el('ev-list');
+    box.innerHTML='<p class="ev-none">One moment&hellip;</p>';
+    load().then(function(list){
+      if(!list.length){
+        box.innerHTML='<p class="ev-none">Nothing is coming up just now. '+
+          '<a href="#mailing-list" style="text-decoration:underline;text-underline-offset:4px">Join our mailing list</a> '+
+          'and we will write when there is.</p>';
+        return;
+      }
+      box.innerHTML=list.map(function(ev){
+        var line=esc(ev.title)+'<br><span class="ev-when">'+esc(ev.when)+'</span>';
+        return '<a href="#event-'+esc(ev.slug)+'">'+
+          (ev.image?'<img src="'+DESK+esc(ev.image)+'" alt="'+esc(ev.imageAlt)+'">':'')+
+          '<div>'+line+'</div></a>';
+      }).join('');
+    }).catch(function(){
+      box.innerHTML='<p class="ev-none">We could not load what is coming up just now. '+
+        'Please write to <a href="mailto:info@interval-clerkenwell.art">info@interval-clerkenwell.art</a>.</p>';
+    });
+  }
+
+  function renderEvent(slug){
+    var page=el('ev-page');
+    page.innerHTML='<p class="ev-none">One moment&hellip;</p>';
+    load().then(function(){
+      var ev=find(slug);
+      if(!ev){
+        page.innerHTML='<p class="ev-none">We could not find that event. '+
+          '<a href="#events" style="text-decoration:underline;text-underline-offset:4px">See what is coming up</a>.</p>';
+        return;
+      }
+      page.innerHTML=
+        (ev.image?'<img src="'+DESK+esc(ev.image)+'" alt="'+esc(ev.imageAlt)+'">':'')+
+        '<h1>'+esc(ev.title)+'<br>'+esc(ev.when)+'</h1>'+
+        (ev.where?'<p class="ev-where">'+esc(ev.where)+'</p>':'')+
+        paras(ev.blurb)+
+        '<div class="ev-rsvp">'+(ev.rsvpOpen?form(ev):shut(ev))+'</div>';
+      if(ev.rsvpOpen) wire(ev);
+    }).catch(function(){
+      page.innerHTML='<p class="ev-none">We could not load that event just now. '+
+        'Please write to <a href="mailto:info@interval-clerkenwell.art">info@interval-clerkenwell.art</a>.</p>';
+    });
+  }
+
+  function shut(ev){
+    return '<h2>RSVP</h2><p class="ev-shut">'+
+      (ev.full
+        ? 'This one is full, we are afraid. Do write to <a href="mailto:info@interval-clerkenwell.art">info@interval-clerkenwell.art</a> and we will see what we can do.'
+        : 'We are no longer taking replies for this one. Do write to <a href="mailto:info@interval-clerkenwell.art">info@interval-clerkenwell.art</a>.')+
+      '</p>';
+  }
+
+  function field(id,label,type,extra){
+    return '<div class="field"><label for="'+id+'">'+label+'</label>'+
+      '<input id="'+id+'" type="'+type+'" '+(extra||'')+'></div>';
+  }
+
+  function form(ev){
+    return '<h2>RSVP</h2><form id="ev-form" novalidate>'+
+      field('ev-first','First name','text','autocomplete="given-name" maxlength="80" required')+
+      field('ev-last','Surname','text','autocomplete="family-name" maxlength="80" required')+
+      field('ev-email','Email address','email','autocomplete="email" maxlength="120" required')+
+      field('ev-phone','Telephone <span class="opt">(optional)</span>','tel','autocomplete="tel" maxlength="40" placeholder="+44 7700 900123"')+
+      field('ev-based','Based in <span class="opt">(optional)</span>','text','autocomplete="address-level2" maxlength="80" placeholder="London"')+
+      (ev.guestsAllowed
+        ? '<label class="tick" style="margin:26px 0 22px"><input id="ev-bring" type="checkbox">'+
+          '<span>I am bringing a guest</span></label>'+
+          '<div class="ev-guest" id="ev-guestbox" hidden>'+
+            field('ev-gfirst','Guest first name','text','maxlength="80"')+
+            field('ev-glast','Guest surname','text','maxlength="80"')+
+            field('ev-gemail','Guest email address','email','maxlength="120"')+
+          '</div>'
+        : '')+
+      '<div class="hp" aria-hidden="true"><label for="ev-xtra">Leave this field empty</label>'+
+      '<input id="ev-xtra" type="text" tabindex="-1" autocomplete="off"></div>'+
+      '<p class="terms">'+esc(ev.terms||'')+'</p>'+
+      '<button id="ev-go" type="submit">Send my RSVP</button>'+
+      '<div class="msg" id="ev-msg" role="status" aria-live="polite"></div>'+
+    '</form>';
+  }
+
+  function wire(ev){
+    var form=el('ev-form'), msg=el('ev-msg'), go=el('ev-go');
+    /* How long the form was open. A script that loads the page and
+       fires immediately looks nothing like a person typing. */
+    var opened=Date.now();
+    var bring=el('ev-bring');
+    if(bring) bring.addEventListener('change',function(){
+      el('ev-guestbox').hidden=!bring.checked;
+      if(bring.checked) el('ev-gfirst').focus();
+    });
+
+    var val=function(id){var e=el(id);return e?(e.value||'').trim():'';};
+    function fail(text,field){
+      msg.className='msg bad';msg.textContent=text;
+      var map={firstName:'ev-first',lastName:'ev-last',email:'ev-email',phone:'ev-phone',
+               guestFirstName:'ev-gfirst',guestLastName:'ev-glast',guestEmail:'ev-gemail'};
+      var e=field&&el(map[field]);
+      if(e)e.focus();
+    }
+
+    form.addEventListener('submit',function(e){
+      e.preventDefault();
+      if(!val('ev-first'))return fail('Please give your first name.','firstName');
+      if(!val('ev-last'))return fail('Please give your surname.','lastName');
+      if(!val('ev-email'))return fail('Please give your email address.','email');
+
+      var guest=null;
+      if(bring&&bring.checked){
+        if(!val('ev-gfirst'))return fail("Please give your guest's first name.",'guestFirstName');
+        if(!val('ev-glast'))return fail("Please give your guest's surname.",'guestLastName');
+        if(!val('ev-gemail'))return fail("Please give your guest's email address.",'guestEmail');
+        guest={firstName:val('ev-gfirst'),lastName:val('ev-glast'),email:val('ev-gemail')};
+      }
+
+      go.disabled=true;msg.className='msg';msg.textContent='Sending\u2026';
+
+      fetch(DESK+'/api/rsvp',{
+        method:'POST',
+        headers:{'content-type':'application/json'},
+        body:JSON.stringify({
+          slug:ev.slug,
+          firstName:val('ev-first'),lastName:val('ev-last'),email:val('ev-email'),
+          phone:val('ev-phone'),basedIn:val('ev-based'),
+          guest:guest,
+          xtra:val('ev-xtra'),
+          t:Date.now()-opened
+        })
+      }).then(function(r){
+        return r.json().catch(function(){return {};}).then(function(d){return {ok:r.ok,body:d};});
+      }).then(function(res){
+        if(!res.ok||!res.body.ok){
+          go.disabled=false;
+          return fail(res.body.error||'Something went wrong. Please try again, or email info@interval-clerkenwell.art.',res.body.field);
+        }
+        var e=res.body.event||{};
+        form.innerHTML='<div class="done" tabindex="-1">Thank you, we have you down.<br>'+
+          esc(e.title||ev.title)+'<br>'+esc(e.when||ev.when)+
+          (e.where?'<br>'+esc(e.where):'')+
+          '<br><br>There is no email to follow, so do keep this.</div>';
+        /* Moving focus to the thank-you is what tells a screen reader
+           the form is done, since the live region went with it. */
+        form.querySelector('.done').focus();
+      })['catch'](function(){
+        go.disabled=false;
+        fail('We could not reach the gallery just now. Please try again, or email info@interval-clerkenwell.art.');
+      });
+    });
+  }
+
+  window.__events=function(hash){
+    if(hash==='events') return renderList();
+    if(hash.indexOf('event-')===0) return renderEvent(hash.slice(6));
+  };
 })();
 </script>
 </body>
