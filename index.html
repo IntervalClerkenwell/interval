@@ -34,6 +34,10 @@
   a{color:inherit;text-decoration:none}
   a:hover{opacity:.6}
   img{display:block;max-width:100%;height:auto}
+  /* Nothing here had a focus style at all, so a keyboard had no way of
+     telling where it was. Umber rather than the browser blue, and only
+     for a keyboard. */
+  :focus-visible{outline:2px solid #7d5a3c;outline-offset:3px}
   em{font-style:italic}
   strong{font-weight:700}
 
@@ -41,13 +45,18 @@
   header{padding-top:clamp(24px,3vw,36px);padding-bottom:clamp(20px,3vw,40px);display:flex;justify-content:space-between;align-items:baseline;gap:24px;position:relative}
   .brand{font-size:25px;letter-spacing:1px;font-family:"adobe-aldine",sans-serif;font-weight:400}
   nav{display:flex;gap:clamp(18px,2.5vw,32px);font-size:13px;align-items:baseline}
-  nav>a,nav .dd>span{padding:4px 0}
+  nav>a,nav .dd>button{padding:4px 0}
   nav .dd{position:relative}
-  nav .dd>span{cursor:pointer;display:inline-flex;align-items:center;gap:6px}
-  nav .dd>span::after{content:"";width:5px;height:5px;border-right:1px solid currentColor;border-bottom:1px solid currentColor;transform:rotate(45deg) translateY(-2px);transition:transform .25s ease;opacity:.6}
-  nav .dd:hover>span::after,nav .dd.open>span::after{transform:rotate(-135deg) translateY(1px);opacity:1}
+  /* A button rather than a span: the menu holds Current, Upcoming, Past
+     and Events, and a span cannot be reached by keyboard at all. */
+  nav .dd>button{cursor:pointer;display:inline-flex;align-items:center;gap:6px;
+                 background:none;border:0;font:inherit;letter-spacing:inherit;color:inherit}
+  nav .dd>button::after{content:"";width:5px;height:5px;border-right:1px solid currentColor;border-bottom:1px solid currentColor;transform:rotate(45deg) translateY(-2px);transition:transform .25s ease;opacity:.6}
+  nav .dd:hover>button::after,nav .dd.open>button::after,nav .dd:focus-within>button::after{transform:rotate(-135deg) translateY(1px);opacity:1}
   nav .dd ul{position:absolute;top:calc(100% + 6px);left:-14px;background:#faf8f3;padding:10px 0;list-style:none;min-width:140px;z-index:20;opacity:0;visibility:hidden;transform:translateY(-4px);transition:opacity .2s ease,transform .2s ease,visibility .2s;box-shadow:0 1px 0 rgba(0,0,0,.06),0 8px 24px rgba(0,0,0,.06)}
-  nav .dd:hover ul,nav .dd.open ul{opacity:1;visibility:visible;transform:none}
+  /* focus-within opens it for a keyboard; .open for a tap, on any device
+     that has no hover to open it with. */
+  nav .dd:hover ul,nav .dd.open ul,nav .dd:focus-within ul{opacity:1;visibility:visible;transform:none}
   nav .dd li a{display:block;padding:7px 18px;font-size:12px}
   nav .dd li a:hover{background:#f2eee5;opacity:1}
   #m{display:none;background:none;border:0;font:inherit;letter-spacing:.085em;cursor:pointer;color:inherit}
@@ -55,12 +64,12 @@
   @media(max-width:720px){
     nav{position:fixed;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:28px;background:#faf8f3;z-index:40;font-size:18px;opacity:0;visibility:hidden;transition:opacity .3s ease,visibility .3s}
     nav.open{opacity:1;visibility:visible}
-    nav>a,nav .dd>span{padding:0}
+    nav>a,nav .dd>button{padding:0}
     nav .dd{display:flex;flex-direction:column;align-items:center;gap:0}
-    nav .dd>span{justify-content:center}
-    nav .dd>span::after{display:none}
+    nav .dd>button{justify-content:center}
+    nav .dd>button::after{display:none}
     nav .dd ul{position:static;opacity:1;visibility:visible;transform:none;box-shadow:none;background:transparent;padding:0;min-width:0;list-style:none;display:flex;flex-direction:column;align-items:center;gap:14px;max-height:0;overflow:hidden;transition:max-height .3s ease;text-align:center}
-    nav .dd.open ul{max-height:200px;margin-top:14px}
+    nav .dd.open ul,nav .dd:focus-within ul{max-height:200px;margin-top:14px}
     nav .dd li a{padding:0;font-size:14px;color:#666}
     nav .dd li a:hover{background:none;opacity:1}
     #m{display:block;position:relative;z-index:50}
@@ -99,7 +108,12 @@
   .signup label{display:block;font-size:10px;letter-spacing:.16em;text-transform:uppercase;color:#6b6760;margin-bottom:7px}
   .signup label .opt{text-transform:none;letter-spacing:.085em;font-size:11px}
   .signup input[type=text],.signup input[type=email],.signup input[type=tel]{width:100%;font:inherit;letter-spacing:.085em;color:#111;background:none;border:0;border-bottom:1px solid #948e82;border-radius:0;padding:7px 0}
-  .signup input:focus{outline:none;border-bottom-color:#111;border-bottom-width:1px}
+  /* A mouse gets the quiet underline; a keyboard gets something it can
+     actually follow across five fields. :focus-visible is what tells the
+     two apart, so nothing changes for anyone clicking. */
+  .signup input:focus{border-bottom-color:#111;border-bottom-width:1px}
+  .signup input:focus:not(:focus-visible){outline:none}
+  .signup input:focus-visible{outline:2px solid #7d5a3c;outline-offset:3px}
   .signup input::placeholder{color:#a39e93;opacity:1}
   .signup .tick{display:flex;gap:11px;align-items:flex-start;margin:32px 0 28px;font-size:12px;line-height:1.6;letter-spacing:.05em;color:#111;text-transform:none;cursor:pointer}
   .signup .tick input{flex:0 0 auto;margin-top:2px;width:15px;height:15px;accent-color:#111}
@@ -158,7 +172,7 @@
   <a href="#home" class="brand">Interval</a>
   <button id="m" aria-label="Menu">Menu</button>
   <nav id="n">
-    <div class="dd"><span>Exhibitions</span>
+    <div class="dd"><button type="button" aria-expanded="false">Exhibitions</button>
       <ul>
         <li><a href="#interval-one">Current</a></li>
         <li><a href="#upcoming">Upcoming</a></li>
@@ -175,7 +189,9 @@
 
 <section data-page="home" class="on">
   <a href="#interval-one" class="hero-img">
-    <img src="assets/exhibitions/interval-one/scarlet-topley.jpg" alt="Interval One: Scarlet Topley and Ed Ruscha">
+    <!-- The only picture on the page anyone lands on. Every other image
+         on the site is lazy; this one is fetched first, on purpose. -->
+    <img src="assets/exhibitions/interval-one/scarlet-topley.jpg" alt="Interval One: Scarlet Topley and Ed Ruscha" width="1600" height="1067" decoding="async" fetchpriority="high">
   </a>
   <div class="hero-cap">
     Interval One: Scarlet Topley and Ed Ruscha<br>
@@ -186,7 +202,7 @@
 
 <article data-page="interval-one">
   <h1>Interval One: Scarlet Topley and Ed Ruscha<br>18th July – 5th September 2026</h1>
-  <img src="assets/exhibitions/interval-one/scarlet-topley.jpg" alt="Interval One: Scarlet Topley and Ed Ruscha">
+  <img src="assets/exhibitions/interval-one/scarlet-topley.jpg" alt="Interval One: Scarlet Topley and Ed Ruscha" width="1600" height="1067" loading="lazy" decoding="async">
   <a href="mailto:jacob@interval-clerkenwell.art?subject=Interval%20One%3A%20Scarlet%20Topley%20and%20Ed%20Ruscha%20-%20Preview%20Request" class="req">Request preview</a>
   <p>The exhibition takes its title from a message received from the artist’s sister whilst on a romantic weekend away in Paris. The tablecloth read Lorette in a scarlet red font with an illustration of a maid sat just above. Lorette refers to a 19th-century Parisian sex worker who was located near the church Notre-Dame-de-Lorette. Scarlet Topley's new works for Lorette emerge from two years of activity in her shed in Camden and at the Ruskin School of Art. The works on display reveal Topley's devotion to americana and its uncanny solitude.</p>
   <p>The work is also tinted with a dark but profound yearning for meaning within the emptiness of modern life. In Lorette, her work is linked together with Ed Ruscha, an artist whose playful approach to language has influenced her since teenagehood. Her copy of his book They Called Her Styrene, Etc. (2000) is dog-eared and paint-splattered. Ruscha is famously uninterested in the mystification other artists of his generation were engaged in. His termite-like consumption of commercial logos and interest in American utility buildings witness the decline of the country’s industrialisation. The motel is an intersection point for the two artists. For Ruscha it's austere roadside architecture, for Topley it's a potential site for transactional sexual encounters, but maybe also for the lonely painter or the washed-up celebrity to stay the night. The basement of the gallery will house a recreation of Scarlet Topley’s studio. A 6x4ft garden shed painted black on the outside, and light pink on the inside, which usually resides at the end of her garden in North London. This space housed many hours of making and conversations, and welcomed many visitors to shows put on by her and friends.</p>
@@ -197,23 +213,23 @@
   <p>Special thanks to Rowan Bazley, Bernard Jacobson Gallery and Gilden ’s Art Gallery.</p>
   <p>For all sales, images and enquires please contact: jacob@interval-clerkenwell.art // +44 7552615933</p>
   <div class="gallery2">
-    <img src="assets/exhibitions/interval-one/interval-one-2.jpg" alt="Interval One: Scarlet Topley and Ed Ruscha">
-    <img src="assets/exhibitions/interval-one/interval-one-3.jpg" alt="Interval One: Scarlet Topley and Ed Ruscha">
-    <img src="assets/exhibitions/interval-one/interval-one-4.jpg" alt="Interval One: Scarlet Topley and Ed Ruscha">
-    <img src="assets/exhibitions/interval-one/interval-one-5.jpg" alt="Interval One: Scarlet Topley and Ed Ruscha">
-    <img src="assets/exhibitions/interval-one/interval-one-6.jpg" alt="Interval One: Scarlet Topley and Ed Ruscha">
-    <img src="assets/exhibitions/interval-one/interval-one-7.jpg" alt="Interval One: Scarlet Topley and Ed Ruscha">
-    <img src="assets/exhibitions/interval-one/interval-one-8.jpg" alt="Interval One: Scarlet Topley and Ed Ruscha">
-    <img src="assets/exhibitions/interval-one/interval-one-9.jpg" alt="Interval One: Scarlet Topley and Ed Ruscha">
-    <img src="assets/exhibitions/interval-one/interval-one-10.jpg" alt="Interval One: Scarlet Topley and Ed Ruscha">
-    <img src="assets/exhibitions/interval-one/interval-one-11.jpg" alt="Interval One: Scarlet Topley and Ed Ruscha">
+    <img src="assets/exhibitions/interval-one/interval-one-2.jpg" alt="Interval One: Scarlet Topley and Ed Ruscha" width="1600" height="1067" loading="lazy" decoding="async">
+    <img src="assets/exhibitions/interval-one/interval-one-3.jpg" alt="Interval One: Scarlet Topley and Ed Ruscha" width="1600" height="1066" loading="lazy" decoding="async">
+    <img src="assets/exhibitions/interval-one/interval-one-4.jpg" alt="Interval One: Scarlet Topley and Ed Ruscha" width="1600" height="1067" loading="lazy" decoding="async">
+    <img src="assets/exhibitions/interval-one/interval-one-5.jpg" alt="Interval One: Scarlet Topley and Ed Ruscha" width="1600" height="1067" loading="lazy" decoding="async">
+    <img src="assets/exhibitions/interval-one/interval-one-6.jpg" alt="Interval One: Scarlet Topley and Ed Ruscha" width="1600" height="1067" loading="lazy" decoding="async">
+    <img src="assets/exhibitions/interval-one/interval-one-7.jpg" alt="Interval One: Scarlet Topley and Ed Ruscha" width="1600" height="1067" loading="lazy" decoding="async">
+    <img src="assets/exhibitions/interval-one/interval-one-8.jpg" alt="Interval One: Scarlet Topley and Ed Ruscha" width="1600" height="1067" loading="lazy" decoding="async">
+    <img src="assets/exhibitions/interval-one/interval-one-9.jpg" alt="Interval One: Scarlet Topley and Ed Ruscha" width="1600" height="932" loading="lazy" decoding="async">
+    <img src="assets/exhibitions/interval-one/interval-one-10.jpg" alt="Interval One: Scarlet Topley and Ed Ruscha" width="1600" height="1067" loading="lazy" decoding="async">
+    <img src="assets/exhibitions/interval-one/interval-one-11.jpg" alt="Interval One: Scarlet Topley and Ed Ruscha" width="1600" height="1067" loading="lazy" decoding="async">
   </div>
   <p>Contact – <a href="mailto:jacob@interval-clerkenwell.art">jacob@interval-clerkenwell.art</a> for all enquiries.</p>
 </article>
 
 <article data-page="newport">
   <h1>Frederic Anderson: <em>Newport 1958</em><br>30th May – 4th July 2026</h1>
-  <img src="assets/exhibitions/newport/river-mint-high-expectations.jpg" alt="Frederic Anderson, River Mint, High Expectations, 2026">
+  <img src="assets/exhibitions/newport/river-mint-high-expectations.jpg" alt="Frederic Anderson, River Mint, High Expectations, 2026" width="1600" height="1067" loading="lazy" decoding="async">
   <a href="mailto:jacob@interval-clerkenwell.art?subject=Newport%201958%20-%20Preview%20Request" class="req">Request preview</a>
   <p><em>Newport 1958</em> by Frederic Anderson brings together a new series of subtle and delicate gestural abstract paintings, presented alongside print works by Spanish artist Antoni Tàpies. Anderson's paintings enter into a dialogue with Tàpies through gesture, rhythm and mark-making. In the basement, a film: <em>Jazz on a Summer's Day</em>, a concert film set at the Newport Jazz Festival in 1958. Directed and edited by Bert Stern and Aram Avakian, the film features performances by Jimmy Giuffre, Thelonious Monk, Sonny Stitt, Anita O'Day, Dinah Washington, Louis Armstrong, Mahalia Jackson and many more, this being the period of jazz music that Anderson connects with so deeply.</p>
   <p>Anderson has developed a distinctive abstract language rooted in drawing. For him, drawing is a raw, intuitive process of rhythm, structure and balance. Like music, his drawings emerge as visceral reactions, often completed within just a few seconds or minutes. Only a few are later selected and developed into paintings through a long, considered process. As the drawings transition into paintings, the pace slows dramatically, the unique tension and energy of the original drawings preserved by carefully controlling every individual element in the composition. A single variation in line thickness or density can irreversibly shift the entire work, requiring intense focus, unlike the spontaneous nature of the drawing process.</p>
@@ -223,16 +239,16 @@
   <p><strong>Frederic Anderson</strong> (b. 1973, Luxembourg) is based in London and draws deep inspiration from the sonic textures of 1950s–60s New York jazz. Anderson earned his BFA from the American College in London and his MFA from the University of the Arts, London. He is represented by Van de Weghe, New York, a gallery known for secondary-market masters such as Warhol and Basquiat, where Anderson stands uniquely as their sole primary artist, signalling a rare crossover between the contemporary and historic.</p>
   <p>Recent gallery and art fair presentations include: Van de Weghe, New York; The Page Gallery, Seoul; Parra &amp; Romero, Madrid. Art Genève; TEFAF Maastricht and New York; Brussels Art Fair (duo with Robert Mangold); Art Basel; Dallas Art Fair (solo); Art Monte Carlo; The Armory Show (solo); Art Basel Paris; Art Basel Miami Beach; ARCO Madrid.</p>
   <div class="gallery2">
-    <img src="assets/exhibitions/newport/newport-2.jpg" alt="Frederic Anderson: Newport 1958">
-    <img src="assets/exhibitions/newport/newport-3.jpg" alt="Frederic Anderson: Newport 1958">
-    <img src="assets/exhibitions/newport/newport-4.jpg" alt="Frederic Anderson: Newport 1958">
-    <img src="assets/exhibitions/newport/newport-5.jpg" alt="Frederic Anderson: Newport 1958">
-    <img src="assets/exhibitions/newport/newport-6.jpg" alt="Frederic Anderson: Newport 1958">
-    <img src="assets/exhibitions/newport/newport-7.jpg" alt="Frederic Anderson: Newport 1958">
-    <img src="assets/exhibitions/newport/newport-8.jpg" alt="Frederic Anderson: Newport 1958">
-    <img src="assets/exhibitions/newport/newport-9.jpg" alt="Frederic Anderson: Newport 1958">
-    <img src="assets/exhibitions/newport/newport-10.jpg" alt="Frederic Anderson: Newport 1958">
-    <img src="assets/exhibitions/newport/newport-11.jpg" alt="Frederic Anderson: Newport 1958">
+    <img src="assets/exhibitions/newport/newport-2.jpg" alt="Frederic Anderson: Newport 1958" width="1600" height="1067" loading="lazy" decoding="async">
+    <img src="assets/exhibitions/newport/newport-3.jpg" alt="Frederic Anderson: Newport 1958" width="1600" height="1067" loading="lazy" decoding="async">
+    <img src="assets/exhibitions/newport/newport-4.jpg" alt="Frederic Anderson: Newport 1958" width="1600" height="1067" loading="lazy" decoding="async">
+    <img src="assets/exhibitions/newport/newport-5.jpg" alt="Frederic Anderson: Newport 1958" width="1600" height="1067" loading="lazy" decoding="async">
+    <img src="assets/exhibitions/newport/newport-6.jpg" alt="Frederic Anderson: Newport 1958" width="1600" height="1067" loading="lazy" decoding="async">
+    <img src="assets/exhibitions/newport/newport-7.jpg" alt="Frederic Anderson: Newport 1958" width="1600" height="1067" loading="lazy" decoding="async">
+    <img src="assets/exhibitions/newport/newport-8.jpg" alt="Frederic Anderson: Newport 1958" width="1600" height="1067" loading="lazy" decoding="async">
+    <img src="assets/exhibitions/newport/newport-9.jpg" alt="Frederic Anderson: Newport 1958" width="1600" height="1067" loading="lazy" decoding="async">
+    <img src="assets/exhibitions/newport/newport-10.jpg" alt="Frederic Anderson: Newport 1958" width="1600" height="1067" loading="lazy" decoding="async">
+    <img src="assets/exhibitions/newport/newport-11.jpg" alt="Frederic Anderson: Newport 1958" width="1600" height="1066" loading="lazy" decoding="async">
   </div>
   <p><strong>Private View:</strong> Thursday 28th May, 6–8pm<br><strong>Public Opening:</strong> Saturday 30th May, 12–6pm</p>
   <p>Contact – <a href="mailto:jacob@interval-clerkenwell.art">jacob@interval-clerkenwell.art</a> for all enquiries.</p>
@@ -240,7 +256,7 @@
 
 <article data-page="scenes">
   <h1>Simon Moretti: Scenes from a Divided Subject<br>11th April – 16th May 2026</h1>
-  <img src="assets/exhibitions/scenes/the-fertile-i-neon.jpg" alt="The Fertile i, Simon Moretti, 2026">
+  <img src="assets/exhibitions/scenes/the-fertile-i-neon.jpg" alt="The Fertile i, Simon Moretti, 2026" width="1600" height="2133" loading="lazy" decoding="async">
   <a href="mailto:jacob@interval-clerkenwell.art?subject=Scenes%20from%20a%20Divided%20Subject%20-%20Preview%20Request" class="req">Request preview</a>
   <p>Simon Moretti: Scenes from a Divided Subject, featuring Paul Éluard, Pablo Picasso and Joel Wyllie.</p>
   <p>"The I is always in the field of the other" – Jacques Lacan, Seminar XI, <em>The Four Fundamental Concepts of Psychoanalysis</em> (1964)</p>
@@ -251,20 +267,20 @@
   <p><strong>Simon Moretti</strong> is an artist based in London. His work deals with psychoanalytical and philosophical concepts through context and display, the use of appropriated images, archives, curatorial and publishing projects. Recent exhibitions include <em>Hereafter</em>, The Swedenborg Society, London (2025); <em>The Enigma of the Hour</em>, with Goshka Macuga, Freud Museum, London (2019); and <em>The Camera Exposed</em>, Victoria & Albert Museum, London (2016).</p>
   <p>Special thanks to Mullany Haute Epoque Fine Art and Sims Reed London.</p>
   <div class="gallery2">
-    <img src="assets/exhibitions/scenes/scenes-2.jpg" alt="Simon Moretti: Scenes from a Divided Subject">
-    <img src="assets/exhibitions/scenes/scenes-3.jpg" alt="Simon Moretti: Scenes from a Divided Subject">
-    <img src="assets/exhibitions/scenes/scenes-4.jpg" alt="Simon Moretti: Scenes from a Divided Subject">
-    <img src="assets/exhibitions/scenes/scenes-5.jpg" alt="Simon Moretti: Scenes from a Divided Subject">
-    <img src="assets/exhibitions/scenes/scenes-6.jpg" alt="Simon Moretti: Scenes from a Divided Subject">
-    <img src="assets/exhibitions/scenes/scenes-7.jpg" alt="Simon Moretti: Scenes from a Divided Subject">
-    <img src="assets/exhibitions/scenes/scenes-8.jpg" alt="Simon Moretti: Scenes from a Divided Subject" class="span2">
+    <img src="assets/exhibitions/scenes/scenes-2.jpg" alt="Simon Moretti: Scenes from a Divided Subject" width="1600" height="1067" loading="lazy" decoding="async">
+    <img src="assets/exhibitions/scenes/scenes-3.jpg" alt="Simon Moretti: Scenes from a Divided Subject" width="1600" height="1067" loading="lazy" decoding="async">
+    <img src="assets/exhibitions/scenes/scenes-4.jpg" alt="Simon Moretti: Scenes from a Divided Subject" width="1600" height="1067" loading="lazy" decoding="async">
+    <img src="assets/exhibitions/scenes/scenes-5.jpg" alt="Simon Moretti: Scenes from a Divided Subject" width="1067" height="1600" loading="lazy" decoding="async">
+    <img src="assets/exhibitions/scenes/scenes-6.jpg" alt="Simon Moretti: Scenes from a Divided Subject" width="1600" height="1067" loading="lazy" decoding="async">
+    <img src="assets/exhibitions/scenes/scenes-7.jpg" alt="Simon Moretti: Scenes from a Divided Subject" width="1600" height="1067" loading="lazy" decoding="async">
+    <img src="assets/exhibitions/scenes/scenes-8.jpg" alt="Simon Moretti: Scenes from a Divided Subject" class="span2" width="1600" height="1067" loading="lazy" decoding="async">
   </div>
   <p>Contact – <a href="mailto:jacob@interval-clerkenwell.art">jacob@interval-clerkenwell.art</a> for all enquiries.</p>
 </article>
 
 <article data-page="gracepoint">
   <h1>Petra Cortright: "gracePOINT" – Independent Art Fair 2026<br>14th – 17th May 2026</h1>
-  <img src="assets/exhibitions/gracepoint/photonic-array.jpg" alt="Petra Cortright: &quot;gracePOINT&quot; – Independent Art Fair 2026">
+  <img src="assets/exhibitions/gracepoint/photonic-array.jpg" alt="Petra Cortright: &quot;gracePOINT&quot; – Independent Art Fair 2026" width="1600" height="1200" loading="lazy" decoding="async">
   <p>Interval's presentation at Independent Art Fair, New York.</p>
   <a href="mailto:jacob@interval-clerkenwell.art?subject=gracePOINT%20-%20Preview%20Request" class="req">Request preview</a>
   <p>"gracePOINT" by LA-based artist Petra Cortright, features new digital paintings on aluminium alongside a video. These new artworks are created in response to old master artworks from the 17th and 18th Century, as well as various medieval Book of Hours manuscript leaves, as well as Cortright's passion for roses and the flora and fauna of her native California.</p>
@@ -279,7 +295,7 @@
 
 <article data-page="lustre">
   <h1>Lustre: Sebastián Espejo & Pierre Bonnard<br>24th January – 28th March 2026</h1>
-  <img src="assets/exhibitions/lustre/espejo-rocas-en-el-mar.jpg" alt="Rocas en el Mar, Sebastián Espejo">
+  <img src="assets/exhibitions/lustre/espejo-rocas-en-el-mar.jpg" alt="Rocas en el Mar, Sebastián Espejo" width="1600" height="1067" loading="lazy" decoding="async">
   <a href="mailto:jacob@interval-clerkenwell.art?subject=Lustre%20-%20Preview%20Request" class="req">Request preview</a>
   <p>Lustre, an exhibition by London-based painter Sebastián Espejo (b.1990, Chile), presented alongside works by Pierre Bonnard. As well as Japanese woodblock prints by Hokusai and Hiroshige, artists that both Espejo and Bonnard frequently reference.</p>
   <p><strong>Sebastián Espejo</strong> (b. 1990) is a Chilean artist based in London, whose practice centres on painting with a focus on exploring the language of the natural world, still lives and the perception of light. Espejo often directly references the historic work of his influences. He has exhibited internationally across the UK, Europe, Asia, and the Americas. In 2025, he had a residency at Drumlanrig Castle and has been selected for Fugger Kunsthof residency in Augsburg.</p>
@@ -289,36 +305,36 @@
   <p><strong>Wildenstein & Co.</strong> is a private art dealership established in 1875, with an emphasis on Old Masters and Impressionists.</p>
   <p>Special thanks to the <strong>Kentoni Collection</strong> for the loan of the Katsushika Hokusai and Utagawa Hiroshige Japanese woodblock prints.</p>
   <div class="gallery2">
-    <img src="assets/exhibitions/lustre/lustre-2.jpg" alt="Lustre: Sebastián Espejo &amp; Pierre Bonnard">
-    <img src="assets/exhibitions/lustre/lustre-3.jpg" alt="Lustre: Sebastián Espejo &amp; Pierre Bonnard">
-    <img src="assets/exhibitions/lustre/lustre-4.jpg" alt="Lustre: Sebastián Espejo &amp; Pierre Bonnard">
-    <img src="assets/exhibitions/lustre/lustre-5.jpg" alt="Lustre: Sebastián Espejo &amp; Pierre Bonnard">
-    <img src="assets/exhibitions/lustre/lustre-6.jpg" alt="Lustre: Sebastián Espejo &amp; Pierre Bonnard">
-    <img src="assets/exhibitions/lustre/lustre-7.jpg" alt="Lustre: Sebastián Espejo &amp; Pierre Bonnard">
-    <img src="assets/exhibitions/lustre/lustre-8.jpg" alt="Lustre: Sebastián Espejo &amp; Pierre Bonnard">
-    <img src="assets/exhibitions/lustre/lustre-9.jpg" alt="Lustre: Sebastián Espejo &amp; Pierre Bonnard">
-    <img src="assets/exhibitions/lustre/lustre-10.jpg" alt="Lustre: Sebastián Espejo &amp; Pierre Bonnard">
-    <img src="assets/exhibitions/lustre/lustre-11.jpg" alt="Lustre: Sebastián Espejo &amp; Pierre Bonnard">
-    <img src="assets/exhibitions/lustre/lustre-12.jpg" alt="Lustre: Sebastián Espejo &amp; Pierre Bonnard" class="span2">
+    <img src="assets/exhibitions/lustre/lustre-2.jpg" alt="Lustre: Sebastián Espejo &amp; Pierre Bonnard" width="1600" height="1067" loading="lazy" decoding="async">
+    <img src="assets/exhibitions/lustre/lustre-3.jpg" alt="Lustre: Sebastián Espejo &amp; Pierre Bonnard" width="1600" height="1067" loading="lazy" decoding="async">
+    <img src="assets/exhibitions/lustre/lustre-4.jpg" alt="Lustre: Sebastián Espejo &amp; Pierre Bonnard" width="1600" height="1067" loading="lazy" decoding="async">
+    <img src="assets/exhibitions/lustre/lustre-5.jpg" alt="Lustre: Sebastián Espejo &amp; Pierre Bonnard" width="1600" height="1067" loading="lazy" decoding="async">
+    <img src="assets/exhibitions/lustre/lustre-6.jpg" alt="Lustre: Sebastián Espejo &amp; Pierre Bonnard" width="1600" height="1067" loading="lazy" decoding="async">
+    <img src="assets/exhibitions/lustre/lustre-7.jpg" alt="Lustre: Sebastián Espejo &amp; Pierre Bonnard" width="1600" height="1067" loading="lazy" decoding="async">
+    <img src="assets/exhibitions/lustre/lustre-8.jpg" alt="Lustre: Sebastián Espejo &amp; Pierre Bonnard" width="1600" height="1067" loading="lazy" decoding="async">
+    <img src="assets/exhibitions/lustre/lustre-9.jpg" alt="Lustre: Sebastián Espejo &amp; Pierre Bonnard" width="1600" height="1067" loading="lazy" decoding="async">
+    <img src="assets/exhibitions/lustre/lustre-10.jpg" alt="Lustre: Sebastián Espejo &amp; Pierre Bonnard" width="1600" height="1067" loading="lazy" decoding="async">
+    <img src="assets/exhibitions/lustre/lustre-11.jpg" alt="Lustre: Sebastián Espejo &amp; Pierre Bonnard" width="1600" height="1067" loading="lazy" decoding="async">
+    <img src="assets/exhibitions/lustre/lustre-12.jpg" alt="Lustre: Sebastián Espejo &amp; Pierre Bonnard" class="span2" width="1600" height="1067" loading="lazy" decoding="async">
   </div>
   <p>Contact – <a href="mailto:jacob@interval-clerkenwell.art">jacob@interval-clerkenwell.art</a> for all enquiries.</p>
 </article>
 
 <article data-page="noblecurve">
   <h1>"NOBLEcurve" featuring Petra Cortright<br>27 September – 20 December 2025</h1>
-  <img src="assets/exhibitions/noblecurve/noblecurve-installation-view.jpg" alt="NOBLEcurve installation">
+  <img src="assets/exhibitions/noblecurve/noblecurve-installation-view.jpg" alt="NOBLEcurve installation" width="1600" height="1067" loading="lazy" decoding="async">
   <p>Interval's inaugural exhibition: new digital paintings by LA-based artist Petra Cortright, presented alongside Old Master works in collaboration with Sam Fogg and Rafael Valls Gallery.</p>
   <p>For the gallery's opening presentation, Cortright produced a new body of work made specifically for the show. Taking source imagery from the historic works on view, she layered and printed each painting on anodized aluminium, responding directly to the objects they hang alongside.</p>
   <div class="gallery2">
-    <img src="assets/exhibitions/noblecurve/noblecurve-8.jpg" alt="&quot;NOBLEcurve&quot; featuring Petra Cortright">
-    <img src="assets/exhibitions/noblecurve/noblecurve-9.jpg" alt="&quot;NOBLEcurve&quot; featuring Petra Cortright">
-    <img src="assets/exhibitions/noblecurve/noblecurve-10.jpg" alt="&quot;NOBLEcurve&quot; featuring Petra Cortright">
-    <img src="assets/exhibitions/noblecurve/noblecurve-11.jpg" alt="&quot;NOBLEcurve&quot; featuring Petra Cortright">
-    <img src="assets/exhibitions/noblecurve/noblecurve-12.jpg" alt="&quot;NOBLEcurve&quot; featuring Petra Cortright">
-    <img src="assets/exhibitions/noblecurve/noblecurve-13.jpg" alt="&quot;NOBLEcurve&quot; featuring Petra Cortright">
-    <img src="assets/exhibitions/noblecurve/noblecurve-14.jpg" alt="&quot;NOBLEcurve&quot; featuring Petra Cortright">
-    <img src="assets/exhibitions/noblecurve/noblecurve-15.jpg" alt="&quot;NOBLEcurve&quot; featuring Petra Cortright">
-    <img src="assets/exhibitions/noblecurve/noblecurve-16.jpg" alt="&quot;NOBLEcurve&quot; featuring Petra Cortright" class="span2">
+    <img src="assets/exhibitions/noblecurve/noblecurve-8.jpg" alt="&quot;NOBLEcurve&quot; featuring Petra Cortright" width="1600" height="1067" loading="lazy" decoding="async">
+    <img src="assets/exhibitions/noblecurve/noblecurve-9.jpg" alt="&quot;NOBLEcurve&quot; featuring Petra Cortright" width="1600" height="1067" loading="lazy" decoding="async">
+    <img src="assets/exhibitions/noblecurve/noblecurve-10.jpg" alt="&quot;NOBLEcurve&quot; featuring Petra Cortright" width="1600" height="1067" loading="lazy" decoding="async">
+    <img src="assets/exhibitions/noblecurve/noblecurve-11.jpg" alt="&quot;NOBLEcurve&quot; featuring Petra Cortright" width="1600" height="1067" loading="lazy" decoding="async">
+    <img src="assets/exhibitions/noblecurve/noblecurve-12.jpg" alt="&quot;NOBLEcurve&quot; featuring Petra Cortright" width="1600" height="1067" loading="lazy" decoding="async">
+    <img src="assets/exhibitions/noblecurve/noblecurve-13.jpg" alt="&quot;NOBLEcurve&quot; featuring Petra Cortright" width="1600" height="1067" loading="lazy" decoding="async">
+    <img src="assets/exhibitions/noblecurve/noblecurve-14.jpg" alt="&quot;NOBLEcurve&quot; featuring Petra Cortright" width="1600" height="1067" loading="lazy" decoding="async">
+    <img src="assets/exhibitions/noblecurve/noblecurve-15.jpg" alt="&quot;NOBLEcurve&quot; featuring Petra Cortright" width="1600" height="1067" loading="lazy" decoding="async">
+    <img src="assets/exhibitions/noblecurve/noblecurve-16.jpg" alt="&quot;NOBLEcurve&quot; featuring Petra Cortright" class="span2" width="1600" height="1067" loading="lazy" decoding="async">
   </div>
   <p>Contact – <a href="mailto:jacob@interval-clerkenwell.art">jacob@interval-clerkenwell.art</a> for all enquiries.</p>
 </article>
@@ -326,7 +342,7 @@
 <section data-page="upcoming">
   <div class="list">
     <div class="item">
-      <img src="assets/exhibitions/the-shudder/the-shudder.jpg" alt="The Shudder">
+      <img src="assets/exhibitions/the-shudder/the-shudder.jpg" alt="The Shudder" width="1200" height="1600" loading="lazy" decoding="async">
       <div>The Shudder<br>19th September – 19th December 2026<br>Featuring: Lewis Brander, Jane Bustin, Edwina Leapman and Gal Schindler<br>Private View: Thursday 17th September, 6–9pm</div>
     </div>
   </div>
@@ -335,23 +351,23 @@
 <section data-page="past">
   <div class="list">
     <a href="#newport">
-      <img src="assets/exhibitions/newport/river-mint-high-expectations.jpg" alt="Frederic Anderson: Newport 1958">
+      <img src="assets/exhibitions/newport/river-mint-high-expectations.jpg" alt="Frederic Anderson: Newport 1958" width="1600" height="1067" loading="lazy" decoding="async">
       <div>Frederic Anderson: Newport 1958<br>30th May – 4th July 2026</div>
     </a>
     <a href="#gracepoint">
-      <img src="assets/exhibitions/gracepoint/photonic-array.jpg" alt="Petra Cortright: &quot;gracePOINT&quot; – Independent Art Fair 2026">
+      <img src="assets/exhibitions/gracepoint/photonic-array.jpg" alt="Petra Cortright: &quot;gracePOINT&quot; – Independent Art Fair 2026" width="1600" height="1200" loading="lazy" decoding="async">
       <div>Petra Cortright: "gracePOINT" – Independent Art Fair 2026<br>14th – 17th May 2026</div>
     </a>
     <a href="#scenes">
-      <img src="assets/exhibitions/scenes/scenes-installation-view.jpg" alt="Simon Moretti: Scenes from a Divided Subject">
+      <img src="assets/exhibitions/scenes/scenes-installation-view.jpg" alt="Simon Moretti: Scenes from a Divided Subject" width="1600" height="1067" loading="lazy" decoding="async">
       <div>Simon Moretti: Scenes from a Divided Subject<br>11th April – 16th May 2026</div>
     </a>
     <a href="#lustre">
-      <img src="assets/exhibitions/lustre/lustre-installation-view.jpg" alt="Lustre">
+      <img src="assets/exhibitions/lustre/lustre-installation-view.jpg" alt="Lustre" width="1600" height="1067" loading="lazy" decoding="async">
       <div>Lustre: Sebastián Espejo and Pierre Bonnard<br>24th January – 28th March 2026</div>
     </a>
     <a href="#noblecurve">
-      <img src="assets/exhibitions/noblecurve/noblecurve-installation-view.jpg" alt="NOBLEcurve">
+      <img src="assets/exhibitions/noblecurve/noblecurve-installation-view.jpg" alt="NOBLEcurve" width="1600" height="1067" loading="lazy" decoding="async">
       <div>"NOBLEcurve" featuring Petra Cortright<br>27 September – 20 December 2025</div>
     </a>
   </div>
@@ -364,7 +380,7 @@
 <article data-page="event" class="signup event" id="ev-page"></article>
 
 <article data-page="about" class="about">
-  <img src="assets/site/gryn-portrait.jpg" alt="David and Jacob Gryn">
+  <img src="assets/site/gryn-portrait.jpg" alt="David and Jacob Gryn" width="1600" height="1075" loading="lazy" decoding="async">
   <h1>About us</h1>
   <p>Interval is a gallery and project space in a 1790s Georgian townhouse at 73 Compton Street, Clerkenwell. The gallery opened in September 2025 after six months of renovation.</p>
   <p>The idea behind Interval is a simple one. Every exhibition pairs a contemporary artist with historic works, so a new digital painting might hang alongside a 17th century still life, or a neon installation sit next to a medieval manuscript leaf. This way of looking at art, where the threads connecting one era to another are made visible in a single room, sits at the heart of the programme.</p>
@@ -379,7 +395,7 @@
   <p><a href="mailto:info@interval-clerkenwell.art">info@interval-clerkenwell.art</a></p>
   <p>T. <a href="tel:+447711127848">+447711127848</a></p>
   <p><a href="#mailing-list">Join our Mailing List</a></p>
-  <img class="contact-img" src="assets/site/still-life-with-flowers.jpg" alt="">
+  <img class="contact-img" src="assets/site/still-life-with-flowers.jpg" alt="" width="1600" height="1067" loading="lazy" decoding="async">
 </article>
 
 <article data-page="mailing-list" class="signup">
@@ -427,7 +443,7 @@
     <div class="msg" id="ml-msg" role="status" aria-live="polite"></div>
   </form>
 
-  <img src="assets/exhibitions/interval-one/interval-one-11.jpg" alt="The lower gallery at 73 Compton Street">
+  <img src="assets/exhibitions/interval-one/interval-one-11.jpg" alt="The lower gallery at 73 Compton Street" width="1600" height="1067" loading="lazy" decoding="async">
 
   <p class="note">Interval Clerkenwell Ltd is the controller of the details you give here. We use them only to send you news from the gallery. Ask to be removed at any time by replying to any email from us, or by writing to <a href="mailto:info@interval-clerkenwell.art">info@interval-clerkenwell.art</a>.</p>
 </article>
@@ -436,7 +452,9 @@
 
 <script>
   const h=document.querySelector('header');
-  const close=()=>{n.classList.remove('open');h.classList.remove('open')};
+  const dds=[...document.querySelectorAll('.dd')];
+  const shut=dd=>{dd.classList.remove('open');dd.querySelector('button').setAttribute('aria-expanded','false')};
+  const close=()=>{n.classList.remove('open');h.classList.remove('open');dds.forEach(shut)};
   const go=()=>{
     const h=location.hash.slice(1)||'home';
     /* One page serves every event, filled in from its address. */
@@ -449,7 +467,31 @@
   addEventListener('hashchange',go);
   addEventListener('DOMContentLoaded',go);
   m.onclick=e=>{e.stopPropagation();n.classList.toggle('open');h.classList.toggle('open')};
-  document.querySelectorAll('.dd>span').forEach(s=>s.onclick=e=>{if(innerWidth<=720){e.stopPropagation();s.parentElement.classList.toggle('open')}});
+  /* Opening on hover is right for a mouse and useless without one. What
+     decides is whether the device has a hover to give, not how wide the
+     window happens to be: an iPad is 834px and has none, and used to be
+     left with no way to open this at all. */
+  const noHover=matchMedia('(hover:none)');
+  dds.forEach(dd=>{
+    const b=dd.querySelector('button');
+    b.onclick=e=>{
+      if(!noHover.matches&&innerWidth>720)return;   /* hover already opened it */
+      e.stopPropagation();
+      const open=!dd.classList.contains('open');
+      dds.forEach(shut);
+      dd.classList.toggle('open',open);
+      b.setAttribute('aria-expanded',String(open));
+    };
+  });
+  /* Escape closes it and puts the caret back on the button, so a keyboard
+     is never left inside a menu it cannot see. */
+  addEventListener('keydown',e=>{
+    if(e.key!=='Escape')return;
+    const dd=dds.find(d=>d.contains(document.activeElement)||d.classList.contains('open'));
+    if(!dd)return;
+    shut(dd);
+    dd.querySelector('button').focus();
+  });
   document.addEventListener('click',e=>{if(!h.contains(e.target))close()});
 </script>
 <script>
