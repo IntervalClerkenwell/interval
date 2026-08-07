@@ -456,7 +456,13 @@
   const shut=dd=>{dd.classList.remove('open');dd.querySelector('button').setAttribute('aria-expanded','false')};
   const close=()=>{n.classList.remove('open');h.classList.remove('open');dds.forEach(shut)};
   const go=()=>{
-    const h=location.hash.slice(1)||'home';
+    /* Three ways in, all landing on the same sections. A hash is what
+       the page has always used and what already-sent invitations carry.
+       window.__route is set by the edge function when the address is a
+       real one like /events/the-shudder, which is what a link shared
+       anywhere else needs to be. The hash wins, so moving around inside
+       an event page still works. */
+    const h=location.hash.slice(1)||window.__route||'home';
     /* One page serves every event, filled in from its address. */
     const k=h.indexOf('event-')===0?'event':h;
     document.querySelectorAll('[data-page]').forEach(p=>p.classList.toggle('on',p.dataset.page===k));
@@ -635,7 +641,9 @@
       }
       box.innerHTML=list.map(function(ev){
         var line=esc(ev.title)+'<br><span class="ev-when">'+esc(ev.when)+'</span>';
-        return '<a href="#event-'+esc(ev.slug)+'">'+
+        /* A real address, so that copying it out of the address bar and
+           sending it to somebody gives them the event and not the site. */
+        return '<a href="/events/'+esc(ev.slug)+'">'+
           (ev.image?'<img src="'+DESK+esc(ev.image)+'" alt="'+esc(ev.imageAlt)+'">':'')+
           '<div>'+line+'</div></a>';
       }).join('');

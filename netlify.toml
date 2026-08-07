@@ -3,6 +3,20 @@
 # root as it stands. Deliberately left that way here, so this file only
 # ever adds headers and cannot change how the site is deployed.
 
+# Events get real addresses. Everything else on the site is a section of
+# index.html reached by a hash, which is fine for a browser and useless
+# for a preview card: an invitation is read in WhatsApp and in a mail
+# client long before it is read in a browser, and neither runs the page's
+# JavaScript. The edge function serves the same page with the event's own
+# title and photograph already in the head.
+[[edge_functions]]
+  path = "/events"
+  function = "event"
+
+[[edge_functions]]
+  path = "/events/*"
+  function = "event"
+
 # Photographs are written once under a name that includes the exhibition,
 # and are replaced by adding a new file rather than overwriting an old one.
 # Netlify's default is "max-age=0, must-revalidate", which made a returning
