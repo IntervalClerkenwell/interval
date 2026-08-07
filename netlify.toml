@@ -1,0 +1,26 @@
+# The site is a single index.html and a folder of photographs. There is no
+# build step, and no publish directory set: Netlify serves the repository
+# root as it stands. Deliberately left that way here, so this file only
+# ever adds headers and cannot change how the site is deployed.
+
+# Photographs are written once under a name that includes the exhibition,
+# and are replaced by adding a new file rather than overwriting an old one.
+# Netlify's default is "max-age=0, must-revalidate", which made a returning
+# visitor ask the server about all 58 of them again on every visit.
+[[headers]]
+  for = "/assets/*"
+  [headers.values]
+    Cache-Control = "public, max-age=31536000, immutable"
+
+# The page itself must never be held: an exhibition goes up by editing it,
+# and a cached copy would keep showing the old show.
+[[headers]]
+  for = "/index.html"
+  [headers.values]
+    Cache-Control = "public, max-age=0, must-revalidate"
+
+[[headers]]
+  for = "/*"
+  [headers.values]
+    X-Content-Type-Options = "nosniff"
+    Referrer-Policy = "strict-origin-when-cross-origin"
