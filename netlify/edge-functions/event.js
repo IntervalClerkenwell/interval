@@ -84,15 +84,28 @@ export default async (request, context) => {
   const isList = /^\/events\/?$/.test(pathname);
   if (!m && !isList) return context.next();
 
+  /* If the page itself cannot be fetched, falling through to the origin
+     is no use: there is no file at /events/<slug>, so context.next() is
+     a bare 404 rather than a page. The hash route is the one that worked
+     before any of this existed and still works, so a visitor is sent
+     there instead and sees the event.
+
+     Seen once for real, in the seconds after a deploy swapped the
+     function in. Brief and self healing, but a link handed to a
+     collector should not have a window where it 404s. */
+  const fallback = () =>
+    m ? Response.redirect(new URL("/#event-" + m[1], request.url), 302)
+      : Response.redirect(new URL("/#events", request.url), 302);
+
   let html;
   try {
     const page = await fetch(new URL("/index.html", request.url), {
       headers: { accept: "text/html" }
     });
-    if (!page.ok) return context.next();
+    if (!page.ok) return fallback();
     html = await page.text();
   } catch (e) {
-    return context.next();
+    return fallback();
   }
 
   /* Which section to open. The router in the page reads this rather
