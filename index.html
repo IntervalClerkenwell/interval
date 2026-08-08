@@ -129,7 +129,9 @@
   .signup .done:focus{outline:none}
   /* The one thing a guest can take away from this page, so it is given
      the weight of a button rather than left as a line of text. */
-  .signup .done .cal{margin:22px 0 18px}
+  /* article p is justified site-wide, which wins over the centring the
+     thank-you inherits and pushed the button off to the left. */
+  .signup .done .cal{margin:22px 0 18px;text-align:center;hyphens:none}
   .signup .done .cal a{display:inline-block;font-size:12px;letter-spacing:.09em;
     text-transform:uppercase;color:#111;text-decoration:none;border:1px solid #111;padding:12px 26px}
   .signup .done .cal a:hover{background:#111;color:#faf8f3}
