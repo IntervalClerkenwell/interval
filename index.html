@@ -127,6 +127,15 @@
      little of its own or the thank-you floats in a void. */
   .signup .done{text-align:center;font-size:13px;line-height:1.9;padding:2px 0 10px}
   .signup .done:focus{outline:none}
+  /* The one thing a guest can take away from this page, so it is given
+     the weight of a button rather than left as a line of text. */
+  /* article p is justified site-wide, which wins over the centring the
+     thank-you inherits and pushed the button off to the left. */
+  .signup .done .cal{margin:22px 0 18px;text-align:center;hyphens:none}
+  .signup .done .cal a{display:inline-block;font-size:12px;letter-spacing:.09em;
+    text-transform:uppercase;color:#111;text-decoration:none;border:1px solid #111;padding:12px 26px}
+  .signup .done .cal a:hover{background:#111;color:#faf8f3}
+  .signup .done .keep{display:block;color:#6b6760;font-size:12px;line-height:1.7}
   .signup img{margin:clamp(40px,5vw,52px) 0 0}
   .signup .note{font-size:11px;line-height:1.8;color:#6b6760;margin-top:clamp(28px,3.5vw,38px);text-align:left;hyphens:none}
   .signup .hp{position:absolute;left:-9999px;width:1px;height:1px;overflow:hidden}
@@ -768,10 +777,16 @@
           return fail(res.body.error||'Something went wrong. Please try again, or email info@interval-clerkenwell.art.',res.body.field);
         }
         var e=res.body.event||{};
+        /* No email follows an RSVP, by choice. So rather than asking
+           somebody standing on a pavement to remember a date off a
+           screen they are about to close, they can put it straight in
+           their calendar. It is a file they ask for, not a message the
+           gallery sends: nothing here writes to the guest. */
         form.innerHTML='<div class="done" tabindex="-1">Thank you, we have you down.<br>'+
           esc(e.title||ev.title)+'<br>'+esc(e.when||ev.when)+
           (e.where?'<br>'+esc(e.where):'')+
-          '<br><br>There is no email to follow, so do keep this.</div>';
+          '<p class="cal"><a href="'+DESK+'/api/event-ics/'+esc(ev.slug)+'">Add it to your calendar</a></p>'+
+          '<span class="keep">There is no email to follow, so do keep this.</span></div>';
         /* Moving focus to the thank-you is what tells a screen reader
            the form is done, since the live region went with it. */
         form.querySelector('.done').focus();
