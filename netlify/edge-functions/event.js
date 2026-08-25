@@ -26,6 +26,46 @@
 const DESK = "https://interval-desk.netlify.app";
 const SITE = "https://interval-clerkenwell.art";
 
+/* ------------------------------------------------------------------
+   Who is waiting, and how long they will wait.
+
+   This function fetches the events from the Desk before it answers,
+   because the head it writes is the whole point of it and the head has
+   to be right when it leaves. That is the correct trade for a preview
+   card, which is read by a machine that does not mind waiting, and the
+   wrong one for a person, who is left looking at nothing while a
+   function on another site wakes up.
+
+   So both are served properly: anything that reads pages for a living
+   is waited for, and a browser is given a second and a bit before the
+   page is sent without the event's own head. Nothing is lost when that
+   happens -- the page draws itself from the same list a moment later,
+   and the visitor sees the event either way. Only a preview card would
+   have noticed, and no preview card was waiting.
+   ------------------------------------------------------------------ */
+const READS_PAGES =
+  /bot|crawl|spider|facebookexternalhit|whatsapp|slack|discord|telegram|twitter|linkedin|embedly|pinterest|skype|quora|applebot|preview/i;
+
+const PATIENCE = 1400;
+
+async function feed(patient) {
+  const ctrl = new AbortController();
+  const timer = patient ? null : setTimeout(() => ctrl.abort(), PATIENCE);
+  try {
+    const res = await fetch(DESK + "/api/events/public", {
+      headers: { accept: "application/json" },
+      signal: ctrl.signal
+    });
+    if (!res.ok) return null;
+    const data = await res.json();
+    return (data && data.events) || null;
+  } catch (e) {
+    return null;                 /* aborted, or the Desk is unreachable */
+  } finally {
+    if (timer) clearTimeout(timer);
+  }
+}
+
 const esc = (s) =>
   String(s == null ? "" : s)
     .replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;")
@@ -113,20 +153,14 @@ export default async (request, context) => {
      #event-<slug> links and these. */
   let route = "events";
   let ev = null;
+  let list = null;
 
   if (m) {
     route = "event-" + m[1];
-    try {
-      const res = await fetch(DESK + "/api/events/public", {
-        headers: { accept: "application/json" }
-      });
-      if (res.ok) {
-        const data = await res.json();
-        ev = ((data && data.events) || []).find((x) => x.slug === m[1]) || null;
-      }
-    } catch (e) {
-      /* The page says so itself, in its own words. */
-    }
+    list = await feed(READS_PAGES.test(request.headers.get("user-agent") || ""));
+    if (list) ev = list.find((x) => x.slug === m[1]) || null;
+    /* If it came back with nothing the page says so itself, in its own
+       words, once it has asked for the list a second time. */
   }
 
   /* Order matters: the site's own tags come out before the event's go
@@ -135,7 +169,24 @@ export default async (request, context) => {
     (ev ? headFor(ev) : `<base href="/">`) +
     `\n<script>window.__route=${JSON.stringify(route)}</script>\n</head>`;
 
-  const out = (ev ? stripSiteHead(html) : html).replace("</head>", inject);
+  let out = (ev ? stripSiteHead(html) : html).replace("</head>", inject);
+
+  /* The list has been fetched already to write the head with, so the
+     page is handed it rather than asking for the same thing again the
+     moment it loads. That is a whole round trip to another site taken
+     out of the middle of somebody opening an invitation.
+
+     It goes in at the top of the head, not the bottom, because the head
+     starts the fetch itself if there is nothing here and it has to be
+     able to see this first. */
+  if (list) {
+    out = out.replace(
+      "<head>",
+      `<head>\n<script>window.__eventsSeed=${
+        JSON.stringify(list).replace(/</g, "\\u003c")
+      }</script>`
+    );
+  }
 
   return new Response(out, {
     status: 200,

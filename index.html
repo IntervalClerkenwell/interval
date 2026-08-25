@@ -27,6 +27,39 @@
 
 <meta name="color-scheme" content="light">
 <link rel="preconnect" href="https://use.typekit.net" crossorigin>
+<!-- The events list is not in this file; it comes from the Desk. Saying so
+     here lets the browser make that connection while it is still reading
+     the page, rather than starting from cold when the script asks. -->
+<link rel="preconnect" href="https://interval-desk.netlify.app" crossorigin>
+<script>
+/* Asking for the events before the page has finished arriving.
+
+   The list used to be asked for at DOMContentLoaded, which is after the
+   whole of this file and the stylesheet: the request had not even left
+   the browser until everything else was done. On an event address the
+   answer is the only thing standing between a visitor and the page, so
+   it is asked for here instead, at the top, and the two happen at once.
+
+   Only on an events address. Nobody reading about the gallery needs
+   this fetched at them. */
+(function(){
+  if(!window.fetch) return;
+  /* On an event address the edge function has already been to the Desk
+     and left the list at the top of this head, so there is nothing to
+     ask for. */
+  if(window.__eventsSeed) return;
+  var h = location.hash.slice(1), p = location.pathname;
+  if(!(h === 'events' || h.indexOf('event-') === 0 || /^\/events(\/|$)/.test(p))) return;
+  var got = fetch('https://interval-desk.netlify.app/api/events/public',
+                  {headers:{'accept':'application/json'}})
+    .then(function(r){ if(!r.ok) throw new Error('no'); return r.json(); })
+    .then(function(d){ return (d && d.events) || []; });
+  /* Somebody has to be listening when this fails, or the browser calls
+     it an unhandled rejection. The page picks it up again below. */
+  got['catch'](function(){});
+  window.__evFeed = got;
+})();
+</script>
 <link rel="stylesheet" href="https://use.typekit.net/iap1ijt.css">
 <style>
   *{box-sizing:border-box;margin:0;padding:0}
@@ -614,6 +647,34 @@
   var DESK='https://interval-desk.netlify.app';
   var events=null, asked=null;
 
+  /* ----------------------------------------------------------------
+     Last time's answer, kept, so the page has something to draw now.
+
+     Everything on this page waits on one request to another site, and
+     a request that has to wake a function up takes about a second and
+     a half. For that second and a half the page said "One moment",
+     which is the whole of what somebody sees who is coming back to
+     check the date of a private view.
+
+     So the last answer is kept and drawn straight away, and the real
+     one replaces it when it arrives -- normally within a blink, and
+     nobody sees the join. Ten minutes is the most that is drawn from
+     memory: events are written weeks ahead and change rarely, and any
+     of it that is wrong is right again a moment later.
+     ---------------------------------------------------------------- */
+  var KEEP='interval-events-1', KEEP_FOR=10*60*1000;
+
+  function remembered(){
+    try{
+      var r=JSON.parse(localStorage.getItem(KEEP)||'null');
+      if(r && r.events && (Date.now()-r.at) < KEEP_FOR) return r.events;
+    }catch(e){}
+    return null;
+  }
+  function remember(list){
+    try{ localStorage.setItem(KEEP, JSON.stringify({at:Date.now(), events:list})); }catch(e){}
+  }
+
   var esc=function(s){return String(s==null?'':s)
     .replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;')
     .replace(/"/g,'&quot;').replace(/'/g,'&#39;');};
@@ -624,12 +685,24 @@
   };
 
   /* Asked for once and kept, so moving between the list and an event
-     does not fetch again. */
+     does not fetch again.
+
+     Three ways it can already be in hand, cheapest first: the edge
+     function fetched the list to write the head of an event page and
+     left it here, so there is nothing to ask for at all; the head of
+     this page started asking before the body had arrived; or neither,
+     and it is asked for now. */
   function load(){
     if(asked) return asked;
-    asked=fetch(LIST,{headers:{'accept':'application/json'}})
+    if(window.__eventsSeed){
+      events=window.__eventsSeed; remember(events);
+      asked=Promise.resolve(events);
+      return asked;
+    }
+    asked=(window.__evFeed || fetch(LIST,{headers:{'accept':'application/json'}})
       .then(function(r){ if(!r.ok) throw new Error('no'); return r.json(); })
-      .then(function(d){ events=(d&&d.events)||[]; return events; });
+      .then(function(d){ return (d&&d.events)||[]; }))
+      .then(function(list){ events=list; remember(list); return list; });
     return asked;
   }
 
@@ -638,48 +711,85 @@
     return null;
   }
 
+  function paintList(box,list){
+    if(!list.length){
+      box.innerHTML='<p class="ev-none">Nothing is coming up just now. '+
+        '<a href="#mailing-list" style="text-decoration:underline;text-underline-offset:4px">Join our mailing list</a> '+
+        'and we will write when there is.</p>';
+      return;
+    }
+    box.innerHTML=list.map(function(ev,i){
+      var line=esc(ev.title)+'<br><span class="ev-when">'+esc(ev.when)+'</span>';
+      /* A real address, so that copying it out of the address bar and
+         sending it to somebody gives them the event and not the site. */
+      return '<a href="/events/'+esc(ev.slug)+'">'+
+        (ev.image?'<img src="'+DESK+esc(ev.image)+'" alt="'+esc(ev.imageAlt)+'"'+
+          /* The one at the top is what the page is for; the rest can
+             wait until they are scrolled to. */
+          (i?' loading="lazy"':'')+' decoding="async">':'')+
+        '<div>'+line+'</div></a>';
+    }).join('');
+  }
+
   function renderList(){
     var box=el('ev-list');
-    box.innerHTML='<p class="ev-none">One moment&hellip;</p>';
+    var seed=remembered();
+    if(seed) paintList(box,seed);
+    else box.innerHTML='<p class="ev-none">One moment&hellip;</p>';
     load().then(function(list){
-      if(!list.length){
-        box.innerHTML='<p class="ev-none">Nothing is coming up just now. '+
-          '<a href="#mailing-list" style="text-decoration:underline;text-underline-offset:4px">Join our mailing list</a> '+
-          'and we will write when there is.</p>';
-        return;
-      }
-      box.innerHTML=list.map(function(ev){
-        var line=esc(ev.title)+'<br><span class="ev-when">'+esc(ev.when)+'</span>';
-        /* A real address, so that copying it out of the address bar and
-           sending it to somebody gives them the event and not the site. */
-        return '<a href="/events/'+esc(ev.slug)+'">'+
-          (ev.image?'<img src="'+DESK+esc(ev.image)+'" alt="'+esc(ev.imageAlt)+'">':'')+
-          '<div>'+line+'</div></a>';
-      }).join('');
+      paintList(box,list);
     }).catch(function(){
+      /* Something is already on the page in that case, and last week's
+         list is a great deal better than an apology. */
+      if(seed) return;
       box.innerHTML='<p class="ev-none">We could not load what is coming up just now. '+
         'Please write to <a href="mailto:info@interval-clerkenwell.art">info@interval-clerkenwell.art</a>.</p>';
     });
   }
 
+  function paintEvent(page,ev){
+    page.innerHTML=
+      (ev.image?'<img src="'+DESK+esc(ev.image)+'" alt="'+esc(ev.imageAlt)+'" decoding="async">':'')+
+      '<h1>'+esc(ev.title)+'<br>'+esc(ev.when)+'</h1>'+
+      (ev.where?'<p class="ev-where">'+esc(ev.where)+'</p>':'')+
+      paras(ev.blurb)+
+      '<div class="ev-rsvp">'+(ev.rsvpOpen?form(ev):shut(ev))+'</div>';
+    if(ev.rsvpOpen) wire(ev);
+  }
+
+  /* Redrawing an event page throws the RSVP form away and builds a new
+     one, which would take somebody's half-typed name with it. So the
+     fresh copy only goes up if it says something different from the one
+     on screen, and never once there is anything in the form to lose. */
+  function typing(page){
+    var f=page.querySelectorAll('input, textarea');
+    for(var i=0;i<f.length;i++) if(f[i].value) return true;
+    return false;
+  }
+
   function renderEvent(slug){
     var page=el('ev-page');
-    page.innerHTML='<p class="ev-none">One moment&hellip;</p>';
+    var seed=remembered(), shown=null;
+    if(seed){
+      events=events||seed;
+      for(var i=0;i<seed.length;i++) if(seed[i].slug===slug){ shown=seed[i]; break; }
+    }
+    if(shown) paintEvent(page,shown);
+    else page.innerHTML='<p class="ev-none">One moment&hellip;</p>';
+
     load().then(function(){
       var ev=find(slug);
       if(!ev){
+        if(shown) return;    /* it was there a moment ago; leave it */
         page.innerHTML='<p class="ev-none">We could not find that event. '+
           '<a href="#events" style="text-decoration:underline;text-underline-offset:4px">See what is coming up</a>.</p>';
         return;
       }
-      page.innerHTML=
-        (ev.image?'<img src="'+DESK+esc(ev.image)+'" alt="'+esc(ev.imageAlt)+'">':'')+
-        '<h1>'+esc(ev.title)+'<br>'+esc(ev.when)+'</h1>'+
-        (ev.where?'<p class="ev-where">'+esc(ev.where)+'</p>':'')+
-        paras(ev.blurb)+
-        '<div class="ev-rsvp">'+(ev.rsvpOpen?form(ev):shut(ev))+'</div>';
-      if(ev.rsvpOpen) wire(ev);
+      if(shown && JSON.stringify(ev)===JSON.stringify(shown)) return;
+      if(shown && typing(page)) return;
+      paintEvent(page,ev);
     }).catch(function(){
+      if(shown) return;
       page.innerHTML='<p class="ev-none">We could not load that event just now. '+
         'Please write to <a href="mailto:info@interval-clerkenwell.art">info@interval-clerkenwell.art</a>.</p>';
     });
