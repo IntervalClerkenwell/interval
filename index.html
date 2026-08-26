@@ -100,6 +100,7 @@
   /* focus-within opens it for a keyboard; .open for a tap, on any device
      that has no hover to open it with. */
   nav .dd:hover ul,nav .dd.open ul,nav .dd:focus-within ul{opacity:1;visibility:visible;transform:none}
+  nav .dd:last-child ul{left:auto;right:-14px}
   nav .dd li a{display:block;padding:7px 18px;font-size:12px}
   nav .dd li a:hover{background:#f2eee5;opacity:1}
   #m{display:none;background:none;border:0;font:inherit;letter-spacing:.085em;cursor:pointer;color:inherit}
@@ -358,6 +359,8 @@
         <li><a href="#events">Events</a></li>
       </ul>
     </div>
+    <a href="#about">About</a>
+    <a href="#contact">Contact</a>
     <div class="dd"><button type="button" aria-expanded="false">Visit</button>
       <ul>
         <li><a href="#visit-galleries">Galleries</a></li>
@@ -365,8 +368,6 @@
         <li><a href="#visit-culture">Culture</a></li>
       </ul>
     </div>
-    <a href="#about">About</a>
-    <a href="#contact">Contact</a>
   </nav>
 </header>
 
