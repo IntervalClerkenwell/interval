@@ -224,8 +224,6 @@
      and colour and asks nobody's server for a tile. It lives in
      assets/visit/ and is fetched only when somebody opens this page. */
   [data-page="visit"]{max-width:none}
-  .v-intro{max-width:540px;margin:0 auto clamp(16px,2.2vw,26px);text-align:center}
-  .v-intro h1{font-size:13px;font-weight:400;line-height:1.7;letter-spacing:.085em}
 
   .v-bar{display:flex;justify-content:flex-end;margin:0 auto 9px;max-width:1000px}
   .v-btn{font:inherit;font-size:10px;letter-spacing:.16em;text-transform:uppercase;color:#6b6760;
@@ -629,9 +627,7 @@
 
 
 <section data-page="visit">
-  <div class="v-intro">
-    <h1 id="v-line">Galleries near us</h1>
-  </div>
+  <h1 class="sr-only" id="v-line">Galleries near us</h1>
 
   <div class="v-bar">
     <button type="button" class="v-btn" id="v-toggle"><span id="v-toggle-l">List view</span></button>
