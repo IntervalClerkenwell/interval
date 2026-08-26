@@ -225,8 +225,7 @@
      assets/visit/ and is fetched only when somebody opens this page. */
   [data-page="visit"]{max-width:none}
   .v-intro{max-width:540px;margin:0 auto clamp(30px,4vw,48px);text-align:center}
-  .v-intro h1{font-size:13px;font-weight:400;line-height:1.7;letter-spacing:.085em;margin-bottom:14px}
-  .v-intro p{font-size:13px;line-height:1.7;color:#6b6760}
+  .v-intro h1{font-size:13px;font-weight:400;line-height:1.7;letter-spacing:.085em}
 
   .v-bar{display:flex;justify-content:flex-end;margin:0 auto 13px;max-width:1000px}
   .v-btn{font:inherit;font-size:10px;letter-spacing:.16em;text-transform:uppercase;color:#6b6760;
@@ -637,8 +636,7 @@
 
 <section data-page="visit">
   <div class="v-intro">
-    <h1>73 Compton Street, Clerkenwell</h1>
-    <p id="v-line">Visit other galleries near us.</p>
+    <h1 id="v-line">Galleries near us</h1>
   </div>
 
   <div class="v-bar">
@@ -1114,9 +1112,7 @@
 (function(){
   var PLAN='assets/visit/clerkenwell-2026-08-26.svg';
   var SEC={g:'galleries',r:'restaurants',c:'culture'};
-  var COPY={g:'Visit other galleries near us.',
-            r:'Where we eat, drink and send people afterwards.',
-            c:'Museums, churches and public collections within walking distance.'};
+  var COPY={g:'Galleries near us',r:'Restaurants near us',c:'Culture near us'};
   /* a restaurant's opening times are the most volatile thing about it and
      the least useful; what kind of place it is lasts */
   var COLS={g:['Gallery','Hours'],r:['Restaurant','Kind'],c:['Museum','Hours']};
