@@ -216,6 +216,132 @@
   .lb-prev{left:6px}.lb-next{right:6px}
   .lb-count{position:absolute;bottom:22px;left:0;right:0;text-align:center;color:#faf8f3;font-size:12px;letter-spacing:.12em;opacity:.7;font-family:inherit}
   main article:not(.contact):not(.about):not(.signup) img{cursor:zoom-in}
+
+  /* ---- Visit -------------------------------------------------------- */
+  /* Three sections off one array: Galleries, Restaurants, Culture. The
+     street plan is drawn, not embedded, so it carries the site's own type
+     and colour and asks nobody's server for a tile. It lives in
+     assets/visit/ and is fetched only when somebody opens this page. */
+  [data-page="visit"]{max-width:none}
+  .v-intro{max-width:540px;margin:0 auto clamp(30px,4vw,48px);text-align:center}
+  .v-intro h1{font-size:13px;font-weight:400;line-height:1.7;letter-spacing:.085em;margin-bottom:14px}
+  .v-intro p{font-size:13px;line-height:1.7;color:#6b6760}
+
+  .v-bar{display:flex;justify-content:flex-end;margin:0 auto 13px;max-width:1000px}
+  .v-btn{font:inherit;font-size:10px;letter-spacing:.16em;text-transform:uppercase;color:#6b6760;
+    background:none;border:1px solid #e2dccd;border-radius:0;padding:8px 15px;cursor:pointer;
+    display:inline-flex;align-items:center;gap:9px;
+    transition:color .18s ease,border-color .18s ease,background .18s ease}
+  .v-btn:hover{color:#faf8f3;background:#111;border-color:#111}
+  .v-btn i{display:inline-block;width:11px;height:9px;border-top:1px solid currentColor;
+    border-bottom:1px solid currentColor;position:relative}
+  .v-btn i::after{content:"";position:absolute;left:0;right:0;top:3px;border-top:1px solid currentColor}
+  .v-btn.to-map i{border:1px solid currentColor;height:11px}
+  .v-btn.to-map i::after{top:auto;left:-1px;right:-1px;bottom:4px;transform:rotate(-24deg)}
+
+  .v-hold{max-width:1000px;margin:0 auto}
+  .v-hold [data-view]{display:none}
+  .v-hold [data-view].on{display:block}
+  .v-wrap{position:relative;border:1px solid #e2dccd;padding:14px;overflow:hidden;min-height:120px}
+  #v-plan{width:100%;height:auto;display:block}
+  #v-plan .s-min{fill:none;stroke:#e0dacb;stroke-width:1.3;stroke-linecap:round;stroke-linejoin:round}
+  #v-plan .s-mid{fill:none;stroke:#c6bda7;stroke-width:2.4;stroke-linecap:round;stroke-linejoin:round}
+  #v-plan .s-maj{fill:none;stroke:#a2977e;stroke-width:4.2;stroke-linecap:round;stroke-linejoin:round}
+  #v-plan .lbl{fill:#a39e93;font-size:14px;letter-spacing:2.4px;text-transform:uppercase;
+    font-family:inherit;text-anchor:middle;paint-order:stroke;stroke:#faf8f3;stroke-width:5px;
+    stroke-linejoin:round}
+  #v-plan .pin{cursor:pointer}
+  #v-plan .pin .hit{fill:none;pointer-events:all}
+  #v-plan .pin circle.dot{fill:#faf8f3;stroke:#111;stroke-width:1.3;transition:fill .18s,stroke .18s}
+  #v-plan .pin text.num{font-family:inherit;font-size:17px;text-anchor:middle;fill:#111;
+    letter-spacing:0;transition:fill .18s;pointer-events:none}
+  #v-plan .pin .ring{fill:none;stroke:#111;stroke-width:.9;opacity:0;transition:opacity .18s}
+  #v-plan .pin .halo{fill:none;stroke:#111;stroke-width:.9;opacity:.5}
+  #v-plan .pin.home circle.dot{fill:#111}
+  #v-plan .pin.home text.num{fill:#faf8f3}
+  #v-plan .pin.home .ring{opacity:.35}
+  #v-plan .pin .tag{font-size:15px;letter-spacing:1.7px;text-transform:uppercase;fill:#111;
+    text-anchor:middle;paint-order:stroke;stroke:#faf8f3;stroke-width:5px;stroke-linejoin:round;
+    pointer-events:none}
+  #v-plan .pin.lit circle.dot{fill:#7d5a3c;stroke:#7d5a3c}
+  #v-plan .pin.lit text.num{fill:#faf8f3}
+  #v-plan .pin.lit .ring{opacity:.45;stroke:#7d5a3c}
+  #v-plan .pin.lit .halo{stroke:#7d5a3c;opacity:.7}
+
+  .v-card{position:absolute;z-index:5;width:214px;background:#faf8f3;border:1px solid #e2dccd;
+    box-shadow:0 1px 0 rgba(0,0,0,.06),0 8px 24px rgba(0,0,0,.06);padding:15px 17px 16px;
+    opacity:0;visibility:hidden;transform:translateY(-3px);pointer-events:none;
+    transition:opacity .18s ease,transform .18s ease,visibility .18s}
+  .v-card.on{opacity:1;visibility:visible;transform:none;pointer-events:auto}
+  .v-card b{display:block;font-size:13px;font-weight:400;letter-spacing:.085em;line-height:1.45;margin-bottom:6px}
+  .v-card .m{font-size:12px;line-height:1.65;color:#6b6760;letter-spacing:.05em}
+  .v-card .m .w{color:#a39e93}
+  .v-card .l{margin-top:9px;font-size:11px;letter-spacing:.1em;text-transform:uppercase}
+  .v-card .l a{color:#7d5a3c;border-bottom:1px solid currentColor;padding-bottom:1px}
+  .v-card .l s{color:#e2dccd;margin:0 8px;text-decoration:none}
+
+  .v-legend{display:flex;gap:22px;flex-wrap:wrap;justify-content:center;margin-top:12px;
+    font-size:10px;letter-spacing:.16em;text-transform:uppercase;color:#a39e93}
+  .v-legend i{display:inline-block;width:9px;height:9px;border-radius:50%;border:1px solid #111;
+    margin-right:7px;vertical-align:-1px}
+  .v-legend .fill{background:#111}
+  .v-legend .ring2{box-shadow:0 0 0 2px #faf8f3,0 0 0 3px #111}
+  .v-legend .cue{color:#7d5a3c}
+
+  .v-list{list-style:none}
+  .v-head,.v-list li{display:grid;
+    grid-template-columns:30px minmax(0,1.15fr) minmax(0,1.45fr) minmax(0,1.15fr) 66px 150px;
+    gap:0 16px;align-items:baseline;padding:15px 4px}
+  .v-head{font-size:10px;letter-spacing:.16em;text-transform:uppercase;color:#a39e93;
+    border-bottom:1px solid #111;padding-top:0;padding-bottom:11px}
+  .v-list li{border-bottom:1px solid #e2dccd;transition:background .18s ease}
+  .v-list li:hover{background:#f2eee5}
+  .v-list .n{font-size:12px;color:#a39e93;letter-spacing:0;font-variant-numeric:tabular-nums}
+  .v-list li:hover .n{color:#7d5a3c}
+  .v-list .nm{font-size:13px;letter-spacing:.085em;line-height:1.45}
+  .v-list .nm.self{font-weight:700}
+  .v-list .ad,.v-list .hr{font-size:12px;line-height:1.5;color:#6b6760;letter-spacing:.05em}
+  .v-list .wk{font-size:12px;color:#a39e93;letter-spacing:.05em;font-variant-numeric:tabular-nums}
+  .v-list .lk{font-size:11px;letter-spacing:.1em;text-transform:uppercase;text-align:right}
+  .v-list .lk a{color:#7d5a3c;border-bottom:1px solid currentColor;padding-bottom:1px}
+  .v-list .lk s{color:#e2dccd;margin:0 7px;text-decoration:none}
+  .v-list .area{grid-column:1/-1;display:block;font-size:10px;letter-spacing:.18em;
+    text-transform:uppercase;color:#7d5a3c;padding:26px 4px 9px;border-bottom:1px solid #111}
+  .v-list li.area-row{padding-top:0;border-bottom:0}
+
+  .v-foot{max-width:540px;margin:clamp(44px,6vw,76px) auto 0;text-align:center;font-size:13px;
+    line-height:1.9;color:#6b6760}
+  .v-foot b{font-weight:400;color:#111}
+  .v-foot hr{border:0;border-top:1px solid #e2dccd;margin:26px auto;width:60px}
+  .v-src{margin-top:22px;font-size:10px;letter-spacing:.12em;text-transform:uppercase;color:#a39e93;
+    text-align:center}
+  .v-src a{border-bottom:1px solid #e2dccd}
+
+  .sr-only{position:absolute;width:1px;height:1px;padding:0;margin:-1px;overflow:hidden;
+    clip:rect(0 0 0 0);white-space:nowrap;border:0}
+
+  @media(max-width:860px){
+    .v-head{display:none}
+    .v-list li{grid-template-columns:30px minmax(0,1fr);gap:2px 12px;padding:16px 2px}
+    .v-list .n{grid-row:1 / span 5}
+    .v-list .lk{text-align:left;margin-top:7px}
+    .v-list .wk.self{display:none}
+  }
+  @media(max-width:720px){
+    #v-plan .lbl{display:none}
+    #v-plan .pin circle.dot{r:22px;stroke-width:2.4}
+    #v-plan .pin .ring{r:29px;stroke-width:1.6}
+    #v-plan .pin .halo{r:34px}
+    #v-plan .pin text.num{font-size:24px}
+    #v-plan .pin.home .tag{font-size:21px;letter-spacing:2px}
+    .v-wrap{overflow:visible}
+    .v-card{position:static;width:auto;margin-top:13px;padding:13px 2px 0;border:0;
+      border-top:1px solid #e2dccd;box-shadow:none;opacity:1;visibility:visible;transform:none;
+      pointer-events:auto;min-height:92px}
+    .v-card:empty::before{content:"Tap a number";color:#a39e93;font-size:11px;
+      letter-spacing:.16em;text-transform:uppercase}
+  }
+
 </style>
 </head>
 <body>
@@ -230,6 +356,13 @@
         <li><a href="#upcoming">Upcoming</a></li>
         <li><a href="#past">Past</a></li>
         <li><a href="#events">Events</a></li>
+      </ul>
+    </div>
+    <div class="dd"><button type="button" aria-expanded="false">Visit</button>
+      <ul>
+        <li><a href="#visit-galleries">Galleries</a></li>
+        <li><a href="#visit-restaurants">Restaurants</a></li>
+        <li><a href="#visit-culture">Culture</a></li>
       </ul>
     </div>
     <a href="#about">About</a>
@@ -500,6 +633,52 @@
   <p class="note">Interval Clerkenwell Ltd is the controller of the details you give here. We use them only to send you news from the gallery. Ask to be removed at any time by replying to any email from us, or by writing to <a href="mailto:info@interval-clerkenwell.art">info@interval-clerkenwell.art</a>.</p>
 </article>
 
+
+<section data-page="visit">
+  <div class="v-intro">
+    <h1>73 Compton Street, Clerkenwell</h1>
+    <p id="v-line">Visit other galleries near us.</p>
+  </div>
+
+  <div class="v-bar">
+    <button type="button" class="v-btn" id="v-toggle"><i></i><span id="v-toggle-l">List view</span></button>
+  </div>
+
+  <div class="v-hold">
+    <div data-view="map" class="on" id="v-vmap">
+      <div class="v-wrap" id="v-wrap">
+        <div id="v-plan-hold"></div>
+        <div class="v-card" id="v-card" role="dialog" aria-live="polite"></div>
+      </div>
+      <div class="v-legend">
+        <span><i class="fill"></i>Interval</span>
+        <span id="v-leg-a"><i></i>Galleries</span>
+        <span id="v-leg-b" hidden><i class="ring2"></i>Museums</span>
+        <span class="cue">Hover a number, or tap it</span>
+      </div>
+      <ol class="sr-only" id="v-sr"></ol>
+    </div>
+
+    <div data-view="list" id="v-vlist">
+      <div class="v-list">
+        <div class="v-head" aria-hidden="true">
+          <span></span><span id="v-col-a">Gallery</span><span>Address</span>
+          <span id="v-col-b">Hours</span><span>Walk</span><span></span>
+        </div>
+      </div>
+      <ol class="v-list" id="v-rows"></ol>
+    </div>
+  </div>
+
+  <div class="v-foot">
+    <hr>
+    <b>Wed &ndash; Sat, 12pm &ndash; 6pm</b><br>or by appointment<br><br>
+    Farringdon 8 min &middot; Barbican 8 min &middot; Angel 12 min<br><br>
+    <b>info@interval-clerkenwell.art</b>
+    <div class="v-src">Street plan drawn from <a href="https://www.openstreetmap.org/copyright" target="_blank" rel="noopener">OpenStreetMap</a> data</div>
+  </div>
+</section>
+
 </main>
 
 <script>
@@ -516,7 +695,9 @@
        an event page still works. */
     const h=location.hash.slice(1)||window.__route||'home';
     /* One page serves every event, filled in from its address. */
-    const k=h.indexOf('event-')===0?'event':h;
+    /* Three addresses share one section, the same way every event does:
+       #visit-galleries, #visit-restaurants, #visit-culture. */
+    const k=h.indexOf('event-')===0?'event':h.indexOf('visit')===0?'visit':h;
     document.querySelectorAll('[data-page]').forEach(p=>p.classList.toggle('on',p.dataset.page===k));
     if(window.__events)window.__events(h);
     scrollTo(0,0);
@@ -923,5 +1104,246 @@
   };
 })();
 </script>
+<script>
+/* The Visit page: Galleries, Restaurants and Culture, three sets off one
+   array, each on its own crop of the same drawn street plan. The plan is
+   126 KB and lives in assets/visit/, fetched the first time somebody opens
+   this page rather than sitting in index.html where every visitor to every
+   page would pay for it. */
+(function(){
+  var PLAN='assets/visit/clerkenwell-2026-08-26.svg';
+  var SEC={g:'galleries',r:'restaurants',c:'culture'};
+  var COPY={g:'Visit other galleries near us.',
+            r:'Where we eat, drink and send people afterwards.',
+            c:'Museums, churches and public collections within walking distance.'};
+  /* a restaurant's opening times are the most volatile thing about it and
+     the least useful; what kind of place it is lasts */
+  var COLS={g:['Gallery','Hours'],r:['Restaurant','Kind'],c:['Museum','Hours']};
+
+var G=[{n:"Interval",a:"73 Compton Street, EC1V 0BN",h:"Wed \u2013 Sat, 12 \u2013 6",d:0,x:1023,y:455,s:"g",me:1},
+{n:"Dragonfly Cafe",a:"71 Compton Street, EC1V 0BN",h:"Vietnamese",d:9,x:1063,y:456,s:"r",u:"https://www.dragonflycafe.uk/"},
+{n:"XVX",a:"72 Compton Street, EC1V 0BN",h:"Fri \u2013 Sat, 12 \u2013 6, by appointment",d:53,x:1050,y:425,s:"g",u:"https://x-v-x.uk/"},
+{n:"Cafe Tiffin",a:"69 Compton Street, EC1V 0BN",h:"Indian",d:53,x:1051,y:415,s:"r",u:"https://cafetiffin.com/"},
+{n:"Scotti's Snack Bar",a:"38 Clerkenwell Green, EC1R 0DU",h:"Sandwich bar",d:256,x:916,y:536,s:"r"},
+{n:"Luca",a:"88 St John Street, EC1M 4EH",h:"Italian",d:280,x:1061,y:601,s:"r",u:"https://luca.restaurant/"},
+{n:"Sessions Arts Club",a:"24 Clerkenwell Green, EC1R 0NA",h:"Restaurant and bar",d:312,x:896,y:572,s:"r",u:"https://sessionsartsclub.com/"},
+{n:"Museum of the Order of St John",a:"St John's Gate, EC1M 4DA",h:"Wed \u2013 Sat, 9.30 \u2013 5",d:321,x:1033,y:628,s:"c",u:"https://museumstjohn.org.uk/",i:1},
+{n:"St. JOHN",a:"26 St John Street, EC1M 4AY",h:"British",d:454,x:1077,y:694,s:"r",u:"https://stjohnrestaurant.com/"},
+{n:"South Parade",a:"79 Saffron Hill, EC1R 5BU",h:"Wed \u2013 Sat, 12 \u2013 6",d:466,x:816,y:599,s:"g",u:"https://www.southparade.biz/"},
+{n:"Morchella",a:"84 Rosebery Avenue, EC1R 4QY",h:"Mediterranean",d:469,x:812,y:310,s:"r",u:"https://www.morchelladining.co.uk/"},
+{n:"Tabac",a:"45 Exmouth Market, EC1R 4QL",h:"French bistrot",d:472,x:805,y:350,s:"r",u:"https://www.tabacbar.co.uk/"},
+{n:"Cafe Kick",a:"43 Exmouth Market, EC1R 4QL",h:"Bar",d:474,x:769,y:368,s:"r",u:"https://www.cafekick.co.uk/"},
+{n:"The Eagle",a:"159 Farringdon Road, EC1R 3AL",h:"Gastropub",d:486,x:760,y:485,s:"r",u:"https://theeaglefarringdon.co.uk/"},
+{n:"Elizabeth Xi Bauer",a:"20\u201322 Exmouth Market, EC1R 4QE",h:"Wed \u2013 Sun, 12 \u2013 6",d:489,x:769,y:379,s:"g",u:"https://elizabethxibauer.com/"},
+{n:"Ginny on Frederick",a:"99 Charterhouse Street, EC1M 6HR",h:"Wed \u2013 Sat, 12 \u2013 6",d:495,x:1087,y:715,s:"g",u:"https://ginnyonfrederick.com/"},
+{n:"Brutto",a:"35\u201337 Greenhill Rents, EC1M 6BN",h:"Italian",d:502,x:1037,y:726,s:"r"},
+{n:"Bouchon Racine",a:"66 Cowcross Street, EC1M 6BP",h:"French",d:503,x:980,y:723,s:"r",u:"https://www.bouchonracine.com/"},
+{n:"Quality Wines",a:"88\u201390 Farringdon Road, EC1R 3EA",h:"Wine bar and shop",d:509,x:763,y:445,s:"r",u:"https://qualitywinesfarringdon.com/"},
+{n:"Vesper",a:"8\u201310 Exmouth Market, EC1R 4QA",h:"Bar",d:518,x:746,y:401,s:"r",u:"https://vesper.restaurant/"},
+{n:"Amanda Wilkinson",a:"47 Farringdon Road, EC1M 3JB",h:"Wed \u2013 Fri, 12 \u2013 6 \u00b7 Sat, 12 \u2013 5",d:519,x:894,y:705,s:"g",u:"https://www.amandawilkinsongallery.com/"},
+{n:"Quality Chop House",a:"92\u201394 Farringdon Road, EC1R 3EA",h:"British",d:520,x:722,y:434,s:"r",u:"https://thequalitychophouse.com/"},
+{n:"Terroni of Clerkenwell",a:"138 Clerkenwell Road, EC1R 5DL",h:"Italian delicatessen",d:525,x:775,y:593,s:"r",u:"https://terroni.co.uk/"},
+{n:"Emalin",a:"4\u20138 Helmet Row, EC1V 3QJ",h:"Wed \u2013 Sat, 11 \u2013 6",d:582,x:1336,y:420,s:"g",u:"https://emalin.co.uk/"},
+{n:"Hollybush Gardens",a:"1\u20132 Warner Yard, EC1R 5EY",h:"Wed \u2013 Sat, 11 \u2013 6",d:599,x:708,y:530,s:"g",u:"https://hollybushgardens.co.uk/"},
+{n:"Sadler's Wells",a:"Rosebery Avenue, EC1R 4TN",h:"Box office daily, 10 \u2013 8",d:606,x:890,y:155,s:"c",u:"https://www.sadlerswells.com/",i:1},
+{n:"Cloth",a:"44 Cloth Fair, EC1A 7JQ",h:"Wine bar and restaurant",d:656,x:1119,y:797,s:"r",u:"https://www.clothrestaurants.com/"},
+{n:"Quentin Blake Centre for Illustration",a:"28 Amwell Street, EC1R 1UN",h:"Wed \u2013 Sun, 10 \u2013 5",d:667,x:760,y:207,s:"c",u:"https://qbcentre.org.uk/",i:1},
+{n:"Restaurant St Barts",a:"63 Bartholomew Close, EC1A 7BF",h:"British, tasting menu",d:723,x:1165,y:819,s:"r",u:"https://restaurant-stbarts.co.uk/"},
+{n:"St Bartholomew the Great",a:"West Smithfield, EC1A 9DS",h:"Mon \u2013 Fri, 8.30 \u2013 5 \u00b7 Sat, 10.30 \u2013 4",d:739,x:1043,y:854,s:"c",u:"https://www.greatstbarts.com/",i:1},
+{n:"Sasa Sushi",a:"422 St John Street, EC1V 4NJ",h:"Japanese",d:804,x:906,y:36,s:"r",u:"https://www.sasasushi.co.uk/"},
+{n:"Barbican Art Gallery",a:"Silk Street, EC2Y 8DS",h:"Tue \u2013 Sun, 10 \u2013 6 \u00b7 Thu \u2013 Fri to 8",d:825,x:1410,y:678,s:"c",u:"https://www.barbican.org.uk/",i:1},
+{n:"The Perimeter",a:"20 Brownlow Mews, WC1N 2LE",h:"Wed \u2013 Sat, 11 \u2013 5",d:918,x:533,y:494,s:"g",u:"https://www.theperimeter.co.uk/"},
+{n:"Galerina",a:"1 Guilford Street, WC1N 1DR",h:"",d:927,x:515,y:458,s:"g",u:"https://galerina.net/"},
+{n:"Brunette Coleman",a:"42 Theobalds Road, WC1X 8NW",h:"Wed \u2013 Sat, 12 \u2013 6",d:1002,x:522,y:664,s:"g",u:"https://www.brunettecoleman.com/"},
+{n:"a. SQUIRE",a:"3 Princeton Street, WC1R 4AX",h:"Thu \u2013 Sat, 11 \u2013 6",d:1117,x:491,y:743,s:"g",u:"https://www.asquire.ltd/"},
+{n:"Cob",a:"84a Lamb's Conduit Street, WC1N 3LT",h:"Tue \u2013 Sat, 11 \u2013 6",d:1145,x:411,y:554,s:"g",u:"https://www.cobgallery.com/"},
+{n:"Z\u00c9RU\u00cc",a:"35 Pilgrim Street, EC4M 7JN",h:"Thu \u2013 Sat, 11 \u2013 5",d:1194,x:1045,y:1101,s:"g",u:"https://www.zerui.gallery/"},
+{n:"Ashley Saville",a:"193 Fleet Street, EC4A 2AH",h:"Wed \u2013 Sat, 10 \u2013 6",d:1310,x:704,y:1088,s:"g",u:"https://ashleysaville.com/"},
+{n:"Sir John Soane's Museum",a:"13 Lincoln's Inn Fields, WC2A 3BP",h:"Wed \u2013 Sun, 10 \u2013 5",d:1312,x:469,y:899,s:"c",u:"https://www.soane.org/",i:1},
+{n:"Vendelmans",a:"1st Floor, 240 High Holborn, WC1V 7DN",h:"Thu \u2013 Fri, 12 \u2013 6 \u00b7 Sat by appointment",d:1362,x:414,y:870,s:"g",u:"https://www.vendelmans.com/"},
+{n:"Pusher",a:"64 Lincoln's Inn Fields, WC2A 3JX",h:"Wed \u2013 Sat, 12 \u2013 6",d:1445,x:419,y:952,s:"g",u:"https://pusher.ink/"},
+{n:"British Museum",a:"Great Russell Street, WC1B 3DG",h:"Daily, 10 \u2013 5 \u00b7 Fri to 8.30",d:1788,x:133,y:837,s:"c",u:"https://www.britishmuseum.org/",i:1},
+{n:"Union Pacific",a:"15 West Central Street, WC1A 1JJ",h:"Tue \u2013 Sat, 11 \u2013 6",d:1789,x:177,y:926,s:"g",u:"https://www.unionpacific.co.uk/"},
+{n:"Isaac Benigson",a:"44 Great Russell Street, WC1B 3JL",h:"Tue \u2013 Sat, 12 \u2013 5.30",d:1790,x:136,y:844,s:"g",u:"https://isaacbenigson.com/"}];
+
+  G.forEach(function(g){
+    /* g.d is straight-line. Streets are not, and this is Clerkenwell: the
+       1.3 is the detour you actually walk, at about 80 m a minute. */
+    g.walk=g.me?null:Math.max(1,Math.round(g.d*1.3/80));
+  });
+  G.sort(function(a,b){return a.d-b.d});
+
+  var NS='http://www.w3.org/2000/svg',
+      hold=document.getElementById('v-plan-hold'),
+      wrap=document.getElementById('v-wrap'),
+      card=document.getElementById('v-card'),
+      sr=document.getElementById('v-sr'),
+      rows=document.getElementById('v-rows'),
+      line=document.getElementById('v-line'),
+      colA=document.getElementById('v-col-a'),colB=document.getElementById('v-col-b'),
+      legA=document.getElementById('v-leg-a'),legB=document.getElementById('v-leg-b'),
+      tog=document.getElementById('v-toggle'),togL=document.getElementById('v-toggle-l'),
+      vmap=document.getElementById('v-vmap'),vlist=document.getElementById('v-vlist');
+  var TOUCH=matchMedia('(hover:none)').matches, NARROW=matchMedia('(max-width:720px)');
+  var svg=null,layer=null,open=null,timer=null,sec=null,view=null,current=[];
+  function narrow(){return NARROW.matches}
+
+  function el(t,at){var e=document.createElementNS(NS,t);for(var k in at)e.setAttribute(k,at[k]);return e}
+  function esc(s){return String(s).replace(/[&<>"]/g,function(c){
+    return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]})}
+  function maps(g){return 'https://www.google.com/maps/search/?api=1&query='+
+    encodeURIComponent(g.n+', '+g.a+', London')}
+  function cell(g){return (g.me&&sec==='r')?'Gallery':g.h}
+  function areaOf(g){
+    if(g.s==='c'&&!g.me)return 'Museums and institutions';
+    var pc=g.a.replace(/.*,\s*/,'');
+    return /^EC4/.test(pc)?'Fleet Street and Blackfriars'
+         : /^WC/.test(pc) ?'Bloomsbury and Holborn'
+         : 'Clerkenwell and Farringdon';
+  }
+  /* Distance alone interleaves the districts, which made the same heading
+     appear twice. Areas are ordered by their nearest member and kept
+     together, nearest-first inside each. */
+  function grouped(list){
+    var order=[],by={};
+    list.forEach(function(g){var a=areaOf(g);if(!by[a]){by[a]=[];order.push(a)}by[a].push(g)});
+    order.sort(function(a,b){
+      var A=a==='Museums and institutions',B=b==='Museums and institutions';
+      return A===B?0:A?1:-1});
+    return order.reduce(function(acc,a){return acc.concat(by[a])},[]);
+  }
+  /* Cropped to whatever is on it, so Culture is not framed by the extent of
+     a set of galleries it does not contain. */
+  function fit(list){
+    if(!svg)return;
+    var xs=list.map(function(g){return g.x}),ys=list.map(function(g){return g.y}),
+        pad=narrow()?44:58,
+        x0=Math.min.apply(null,xs)-pad,x1=Math.max.apply(null,xs)+pad,
+        y0=Math.min.apply(null,ys)-pad,y1=Math.max.apply(null,ys)+pad,
+        w=x1-x0,h=y1-y0,MIN=1.25,MAX=1.75,n;
+    if(w/h>MAX){n=w/MAX;y0-=(n-h)/2;y1+=(n-h)/2}
+    if(w/h<MIN){n=h*MIN;x0-=(n-w)/2;x1+=(n-w)/2}
+    svg.setAttribute('viewBox',[x0,y0,x1-x0,y1-y0].map(Math.round).join(' '));
+  }
+  function queueHide(){if(narrow())return;clearTimeout(timer);timer=setTimeout(hide,140)}
+  function hide(){clearTimeout(timer);card.classList.remove('on');
+    if(open){open.pin.classList.remove('lit');open=null}}
+  function show(g){
+    clearTimeout(timer);
+    if(open&&open!==g)open.pin.classList.remove('lit');
+    open=g;g.pin.classList.add('lit');
+    card.innerHTML='<b>'+esc(g.n)+'</b><div class="m">'+esc(g.a)+
+      (cell(g)?'<br>'+esc(cell(g)):'')+
+      (g.me?'':'<br><span class="w">'+g.walk+' min walk</span>')+'</div>'+
+      '<div class="l">'+(g.u?'<a href="'+esc(g.u)+'" target="_blank" rel="noopener">Website</a><s>&middot;</s>':'')+
+      '<a href="'+esc(maps(g))+'" target="_blank" rel="noopener">Directions</a></div>';
+    card.classList.add('on');
+    if(narrow())return;
+    var wr=wrap.getBoundingClientRect(),pr=g.pin.querySelector('circle.dot').getBoundingClientRect(),
+        cx=pr.left+pr.width/2-wr.left,w=card.offsetWidth,h=card.offsetHeight,
+        left=Math.max(8,Math.min(cx-w/2,wr.width-w-8)),top=pr.top-wr.top-h-12;
+    if(top<8)top=pr.bottom-wr.top+12;
+    card.style.left=left+'px';card.style.top=top+'px';
+  }
+  function render(){
+    hide();
+    if(layer)layer.textContent='';
+    rows.textContent='';sr.textContent='';
+    current=grouped(G.filter(function(g){return g.s===sec||g.me}));
+    /* Headings earn their place only when every group is a group. */
+    var tally={};current.forEach(function(g){var a=areaOf(g);tally[a]=(tally[a]||0)+1});
+    var areas=Object.keys(tally),
+        heads=areas.length>1&&areas.every(function(a){return tally[a]>1}),last=null;
+    current.forEach(function(g,i){
+      var num=i+1,inst=g.i&&!g.me;
+      if(layer){
+        var p=el('g',{'class':'pin'+(g.me?' home':'')+(inst?' inst':''),tabindex:'0',
+                      role:'button','aria-label':g.n+', '+g.a});
+        p.appendChild(el('circle',{cx:g.x,cy:g.y,r:40,'class':'hit'}));
+        if(inst)p.appendChild(el('circle',{cx:g.x,cy:g.y,r:27,'class':'halo'}));
+        p.appendChild(el('circle',{cx:g.x,cy:g.y,r:24,'class':'ring'}));
+        p.appendChild(el('circle',{cx:g.x,cy:g.y,r:17,'class':'dot'}));
+        var t=el('text',{x:g.x,y:g.y+5.6,'class':'num'});t.textContent=num;p.appendChild(t);
+        if(g.me){var tg=el('text',{x:g.x,y:g.y+38,'class':'tag'});tg.textContent='Interval';p.appendChild(tg)}
+        layer.appendChild(p);g.pin=p;
+        if(!TOUCH){p.addEventListener('mouseenter',function(){show(g)});
+                   p.addEventListener('mouseleave',queueHide)}
+        p.addEventListener('click',function(e){e.stopPropagation();show(g)});
+        p.addEventListener('focus',function(){show(g)});
+        p.addEventListener('blur',queueHide);
+        p.addEventListener('keydown',function(e){if(e.key==='Escape'){hide();p.blur()}});
+      }
+      var s=document.createElement('li');
+      s.textContent=g.n+' \u2014 '+g.a+(cell(g)?', '+cell(g):'')+
+        (g.me?'':', '+g.walk+' minutes walk from Interval');
+      sr.appendChild(s);
+      var area=areaOf(g);
+      if(heads&&area!==last){
+        var hd=document.createElement('li');hd.className='area-row';
+        hd.innerHTML='<span class="area">'+esc(area)+'</span>';rows.appendChild(hd);last=area;
+      }
+      var li=document.createElement('li');
+      li.innerHTML='<span class="n">'+num+'</span>'+
+        '<span class="nm'+(g.me?' self':'')+'">'+esc(g.n)+'</span>'+
+        '<span class="ad">'+esc(g.a)+'</span>'+
+        '<span class="hr">'+esc(cell(g))+'</span>'+
+        '<span class="wk'+(g.me?' self':'')+'">'+(g.me?'\u2014':g.walk+' min')+'</span>'+
+        '<span class="lk">'+(g.u?'<a href="'+esc(g.u)+'" target="_blank" rel="noopener">Website</a><s>&middot;</s>':'')+
+        '<a href="'+esc(maps(g))+'" target="_blank" rel="noopener">Directions</a></span>';
+      rows.appendChild(li);
+    });
+    fit(current);
+  }
+  function setView(v){
+    view=v;
+    vmap.classList.toggle('on',v==='map');vlist.classList.toggle('on',v==='list');
+    togL.textContent=v==='map'?'List view':'Map view';
+    tog.classList.toggle('to-map',v==='list');
+    tog.setAttribute('aria-label',v==='map'?'Switch to list view':'Switch to map view');
+    sr.hidden=(v==='list');
+    hide();
+  }
+  function setSection(k){
+    if(!SEC[k])k='g';
+    sec=k;
+    line.textContent=COPY[k];
+    colA.textContent=COLS[k][0];colB.textContent=COLS[k][1];
+    legA.hidden=(k==='c');legB.hidden=(k!=='c');
+    render();
+  }
+  tog.addEventListener('click',function(e){e.stopPropagation();setView(view==='map'?'list':'map')});
+  card.addEventListener('mouseenter',function(){clearTimeout(timer)});
+  card.addEventListener('mouseleave',queueHide);
+  document.addEventListener('click',function(){if(!narrow())hide()});
+  NARROW.addEventListener('change',function(){hide();fit(current)});
+
+  /* The plan is asked for once, the first time this page is opened. */
+  var asked=false;
+  function loadPlan(){
+    if(asked)return;asked=true;
+    fetch(PLAN).then(function(r){if(!r.ok)throw 0;return r.text()}).then(function(t){
+      hold.innerHTML=t;
+      svg=document.getElementById('v-plan');
+      layer=el('g',{});svg.appendChild(layer);
+      render();
+    })['catch'](function(){
+      /* the list is the whole of the information; only the picture is lost */
+      hold.innerHTML='';setView('list');
+    });
+  }
+  function route(){
+    var h=location.hash.slice(1);
+    if(h.indexOf('visit')!==0)return;
+    var k=h.slice(6,7)||'g';
+    if(k!==sec){setSection(k);setView(narrow()?'list':'map')}
+    loadPlan();
+  }
+  addEventListener('hashchange',route);
+  setSection('g');
+  setView(narrow()?'list':'map');
+  route();
+})();
+</script>
+
 </body>
 </html>
