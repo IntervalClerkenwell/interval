@@ -641,7 +641,7 @@
       </div>
       <div class="v-legend">
         <span><i class="fill"></i>Interval</span>
-        <span id="v-leg-a"><i></i>Galleries</span>
+        <span id="v-leg-a"><i></i><span id="v-leg-a-l">Galleries</span></span>
         <span id="v-leg-b" hidden><i class="ring2"></i>Museums</span>
         <span class="cue">Hover a number, or tap it</span>
       </div>
@@ -1105,7 +1105,8 @@
   var COPY={g:'Galleries near us',r:'Restaurants near us',c:'Culture near us'};
   /* a restaurant's opening times are the most volatile thing about it and
      the least useful; what kind of place it is lasts */
-  var COLS={g:['Gallery','Hours'],r:['Restaurant','Kind'],c:['Museum','Hours']};
+  var COLS={g:['Gallery','Hours','Galleries'],r:['Restaurant','Kind','Restaurants'],
+            c:['Museum','Hours',null]};
 
 var G=[{n:"Interval",a:"73 Compton Street, EC1V 0BN",h:"Wed \u2013 Sat, 12 \u2013 6",d:0,x:1023,y:455,s:"g",me:1},
 {n:"Dragonfly Cafe",a:"71 Compton Street, EC1V 0BN",h:"Vietnamese",d:9,x:1063,y:456,s:"r",u:"https://www.dragonflycafe.uk/"},
@@ -1170,6 +1171,7 @@ var G=[{n:"Interval",a:"73 Compton Street, EC1V 0BN",h:"Wed \u2013 Sat, 12 \u201
       line=document.getElementById('v-line'),
       colA=document.getElementById('v-col-a'),colB=document.getElementById('v-col-b'),
       legA=document.getElementById('v-leg-a'),legB=document.getElementById('v-leg-b'),
+      legAL=document.getElementById('v-leg-a-l'),
       tog=document.getElementById('v-toggle'),togL=document.getElementById('v-toggle-l'),
       vmap=document.getElementById('v-vmap'),vlist=document.getElementById('v-vlist');
   var TOUCH=matchMedia('(hover:none)').matches, NARROW=matchMedia('(max-width:720px)');
@@ -1295,7 +1297,8 @@ var G=[{n:"Interval",a:"73 Compton Street, EC1V 0BN",h:"Wed \u2013 Sat, 12 \u201
     sec=k;
     line.textContent=COPY[k];
     colA.textContent=COLS[k][0];colB.textContent=COLS[k][1];
-    legA.hidden=(k==='c');legB.hidden=(k!=='c');
+    legA.hidden=!COLS[k][2];legB.hidden=(k!=='c');
+    if(COLS[k][2])legAL.textContent=COLS[k][2];
     render();
   }
   tog.addEventListener('click',function(e){e.stopPropagation();setView(view==='map'?'list':'map')});
