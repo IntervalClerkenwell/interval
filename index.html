@@ -1092,7 +1092,7 @@
         form.innerHTML='<div class="done" tabindex="-1">Thank you, we have you down.<br>'+
           esc(e.title||ev.title)+'<br>'+esc(e.when||ev.when)+
           (e.where?'<br>'+esc(e.where):'')+
-          '<p class="cal"><a href="'+DESK+'/api/event-ics/'+esc(ev.slug)+'">Add it to your calendar</a></p>'+
+          '<p class="cal"><a href="/events/'+esc(ev.slug)+'/calendar.ics">Add it to your calendar</a></p>'+
           '<span class="keep">There is no email to follow, so do keep this.</span></div>';
         /* Moving focus to the thank-you is what tells a screen reader
            the form is done, since the live region went with it. */
@@ -1334,8 +1334,9 @@ var G=[{n:"Interval",a:"73 Compton Street, EC1V 0BN",h:"Wed \u2013 Sat, 12 \u201
       layer=el('g',{});svg.appendChild(layer);
       render();
     })['catch'](function(){
-      /* the list is the whole of the information; only the picture is lost */
-      hold.innerHTML='';setView('list');
+      /* the list is the whole of the information; only the picture is
+         lost. The toggle goes with it, or it would offer an empty box. */
+      hold.innerHTML='';tog.hidden=true;setView('list');
     });
   }
   /* Driven by the router at the top of the page, which hands every
@@ -1344,7 +1345,10 @@ var G=[{n:"Interval",a:"73 Compton Street, EC1V 0BN",h:"Wed \u2013 Sat, 12 \u201
   function route(h){
     if(h.indexOf('visit')!==0)return;
     var k=h.slice(6,7)||'g';
-    if(k!==sec){setSection(k);setView(narrow()?'list':'map')}
+    /* The chosen view survives moving between sections: somebody
+       reading the list of galleries wants the list of restaurants,
+       not the map back. */
+    if(k!==sec)setSection(k);
     loadPlan();
   }
   window.__visit=route;

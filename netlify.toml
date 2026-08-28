@@ -49,3 +49,19 @@
   [headers.values]
     X-Content-Type-Options = "nosniff"
     Referrer-Policy = "strict-origin-when-cross-origin"
+
+# The calendar file a guest downloads should carry the gallery's own
+# domain, not the hosting company's. The events edge function passes
+# paths deeper than a slug straight through, so this proxy is what
+# answers. The Desk builds the file.
+[[redirects]]
+  from = "/events/:slug/calendar.ics"
+  to = "https://interval-desk.netlify.app/api/event-ics/:slug"
+  status = 200
+
+# Icons change about never, and were being asked about on every visit.
+# A week, not a year: they keep their filenames when they do change.
+[[headers]]
+  for = "/icons/*"
+  [headers.values]
+    Cache-Control = "public, max-age=604800"
