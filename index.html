@@ -354,9 +354,9 @@
     <a href="#contact">Contact</a>
     <div class="dd"><button type="button" aria-expanded="false">Visit</button>
       <ul>
-        <li><a href="#visit-galleries">Galleries</a></li>
-        <li><a href="#visit-restaurants">Restaurants</a></li>
-        <li><a href="#visit-culture">Culture</a></li>
+        <li><a href="/visit">Galleries</a></li>
+        <li><a href="/visit/restaurants">Restaurants</a></li>
+        <li><a href="/visit/culture">Culture</a></li>
       </ul>
     </div>
   </nav>
@@ -675,25 +675,42 @@
   const dds=[...document.querySelectorAll('.dd')];
   const shut=dd=>{dd.classList.remove('open');dd.querySelector('button').setAttribute('aria-expanded','false')};
   const close=()=>{n.classList.remove('open');h.classList.remove('open');dds.forEach(shut)};
+  /* A real Visit address, read back into a route. Events lean on
+     window.__route from their edge function; Visit also needs the path
+     itself, because moving between its sections rewrites the address
+     with pushState and __route only ever says where the page began. */
+  const pathRoute=()=>{
+    const m=/^\/visit(?:\/(galleries|restaurants|culture))?\/?$/.exec(location.pathname);
+    return m?'visit-'+(m[1]||'galleries'):'';
+  };
   const go=()=>{
-    /* Three ways in, all landing on the same sections. A hash is what
-       the page has always used and what already-sent invitations carry.
-       window.__route is set by the edge function when the address is a
-       real one like /events/the-shudder, which is what a link shared
-       anywhere else needs to be. The hash wins, so moving around inside
-       an event page still works. */
-    const h=location.hash.slice(1)||window.__route||'home';
-    /* One page serves every event, filled in from its address. */
-    /* Three addresses share one section, the same way every event does:
-       #visit-galleries, #visit-restaurants, #visit-culture. */
+    /* Ways in, in order of who wins. A hash is what the page has always
+       used and what already-sent links carry, so it wins. Then the real
+       path, /visit or /events/the-shudder. Then window.__route, set by
+       an edge function when it served the page. */
+    const h=location.hash.slice(1)||pathRoute()||window.__route||'home';
+    /* One page serves every event, and one serves every Visit section. */
     const k=h.indexOf('event-')===0?'event':h.indexOf('visit')===0?'visit':h;
     document.querySelectorAll('[data-page]').forEach(p=>p.classList.toggle('on',p.dataset.page===k));
     if(window.__events)window.__events(h);
+    if(window.__visit)window.__visit(h);
     scrollTo(0,0);
     close();
   };
   addEventListener('hashchange',go);
+  addEventListener('popstate',go);
   addEventListener('DOMContentLoaded',go);
+  /* Visit links are real addresses so they can be found and shared,
+     but a click inside the site should not pay a full reload for a
+     section this page can simply show. The address still changes, so
+     copying it or opening a link in a new tab gets the real one. */
+  document.addEventListener('click',e=>{
+    const a=e.target.closest('a[href^="/visit"]');
+    if(!a||e.metaKey||e.ctrlKey||e.shiftKey||e.altKey||e.button)return;
+    e.preventDefault();
+    history.pushState(null,'',a.getAttribute('href'));
+    go();
+  });
   m.onclick=e=>{e.stopPropagation();n.classList.toggle('open');h.classList.toggle('open')};
   /* Opening on hover is right for a mouse and useless without one. What
      decides is whether the device has a hover to give, not how wide the
@@ -1321,17 +1338,18 @@ var G=[{n:"Interval",a:"73 Compton Street, EC1V 0BN",h:"Wed \u2013 Sat, 12 \u201
       hold.innerHTML='';setView('list');
     });
   }
-  function route(){
-    var h=location.hash.slice(1);
+  /* Driven by the router at the top of the page, which hands every
+     route change here whether it came from a hash, a real /visit
+     address, or a click it turned into pushState. */
+  function route(h){
     if(h.indexOf('visit')!==0)return;
     var k=h.slice(6,7)||'g';
     if(k!==sec){setSection(k);setView(narrow()?'list':'map')}
     loadPlan();
   }
-  addEventListener('hashchange',route);
+  window.__visit=route;
   setSection('g');
   setView(narrow()?'list':'map');
-  route();
 })();
 </script>
 

@@ -17,6 +17,17 @@
   path = "/events/*"
   function = "event"
 
+# The Visit page gets the same treatment: real addresses with each
+# section's own title and description, so somebody searching for
+# galleries near Clerkenwell can actually be sent there.
+[[edge_functions]]
+  path = "/visit"
+  function = "visit"
+
+[[edge_functions]]
+  path = "/visit/*"
+  function = "visit"
+
 # Photographs are written once under a name that includes the exhibition,
 # and are replaced by adding a new file rather than overwriting an old one.
 # Netlify's default is "max-age=0, must-revalidate", which made a returning
