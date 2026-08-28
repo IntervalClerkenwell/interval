@@ -78,7 +78,7 @@ const esc = (s) =>
 function describe(ev) {
   const head = [ev.when, ev.where].filter(Boolean).join(" · ");
   const blurb = String(ev.blurb || "").replace(/\s+/g, " ").trim();
-  let out = [head, blurb].filter(Boolean).join(" — ");
+  let out = [head, blurb].filter(Boolean).join(" · ");
   if (out.length <= 200) return out;
   out = out.slice(0, 200);
   return out.slice(0, out.lastIndexOf(" ")).replace(/[,;:—-]$/, "") + "…";
