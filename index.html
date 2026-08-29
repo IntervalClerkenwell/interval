@@ -21,6 +21,72 @@
 <meta name="twitter:description" content="A gallery and project space in Clerkenwell pairing contemporary artists with historic works.">
 <meta name="twitter:image" content="https://interval-clerkenwell.art/assets/site/social-preview.jpg">
 
+<!-- Canonical for the home page. The event, visit and exhibition edge
+     functions write their own canonical into the head and strip this
+     one out first, so a page served from a deeper path is never left
+     pointing at the homepage. -->
+<link rel="canonical" href="https://interval-clerkenwell.art/">
+
+<!-- Structured data. The gallery, and the shows that are on now or
+     coming, so a search engine can read the address, hours and dates
+     rather than guessing them from the prose. Every value here is the
+     one already written on the page (Contact and the exhibition
+     sections); nothing is invented. -->
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@graph": [
+    {
+      "@type": "ArtGallery",
+      "@id": "https://interval-clerkenwell.art/#gallery",
+      "name": "Interval",
+      "legalName": "Interval Clerkenwell Ltd",
+      "url": "https://interval-clerkenwell.art",
+      "image": "https://interval-clerkenwell.art/assets/site/social-preview.jpg",
+      "email": "info@interval-clerkenwell.art",
+      "telephone": "+447711127848",
+      "address": {
+        "@type": "PostalAddress",
+        "streetAddress": "73 Compton Street",
+        "addressLocality": "London",
+        "postalCode": "EC1V 0BN",
+        "addressCountry": "GB"
+      },
+      "openingHoursSpecification": [
+        {
+          "@type": "OpeningHoursSpecification",
+          "dayOfWeek": ["Wednesday", "Thursday", "Friday", "Saturday"],
+          "opens": "12:00",
+          "closes": "18:00"
+        }
+      ],
+      "founder": [
+        { "@type": "Person", "name": "David Gryn" },
+        { "@type": "Person", "name": "Jacob Gryn" }
+      ]
+    },
+    {
+      "@type": "ExhibitionEvent",
+      "name": "Interval One: Scarlet Topley and Ed Ruscha",
+      "startDate": "2026-07-18",
+      "endDate": "2026-09-05",
+      "url": "https://interval-clerkenwell.art/exhibitions/interval-one",
+      "image": "https://interval-clerkenwell.art/assets/exhibitions/interval-one/scarlet-topley.jpg",
+      "location": { "@id": "https://interval-clerkenwell.art/#gallery" }
+    },
+    {
+      "@type": "ExhibitionEvent",
+      "name": "The Shudder",
+      "startDate": "2026-09-24",
+      "endDate": "2026-12-19",
+      "url": "https://interval-clerkenwell.art/exhibitions/the-shudder",
+      "image": "https://interval-clerkenwell.art/assets/exhibitions/the-shudder/the-shudder.jpg",
+      "location": { "@id": "https://interval-clerkenwell.art/#gallery" }
+    }
+  ]
+}
+</script>
+
 <!-- Favicon -->
 <!-- The same icon the Desk uses: Jacob's serif I in Adobe Aldine,
      rasterised at each size rather than scaled from one bitmap. The
@@ -462,7 +528,7 @@
   <a href="mailto:jacob@interval-clerkenwell.art?subject=gracePOINT%20-%20Preview%20Request" class="req">Request preview</a>
   <p>"gracePOINT" by LA-based artist Petra Cortright, features new digital paintings on aluminium alongside a video. These new artworks are created in response to old master artworks from the 17th and 18th Century, as well as various medieval Book of Hours manuscript leaves, as well as Cortright's passion for roses and the flora and fauna of her native California.</p>
   <p>Petra Cortright's rich and beautifully formed artworks were created in response to the consigned works for the inaugural show from Interval's old master gallery collaborators Rafael Valls and Sam Fogg, featuring 17th and 18th century Dutch and Spanish floral still life paintings by Jan Van Os, José de Arrelano, alongside several 15th century Book of Hours manuscript leaves. The relationship between Petra Cortright's and the old master works shows an amazing connection and parity between art made in different times and that the language of art making is both continuous and also ever-evolving with the development of new techniques and digital mediums.</p>
-  <p>&lt;strong&gt;Petra Cortright&lt;/strong&gt; (b.1986, Santa Barbara, California) is a Los Angeles based artist whose practice spans digital painting, video and online culture. Over the last 15 years Petra has been working in the format of digital painting. A unique process comprised of working with reference imagery that is then scanned and expanded pixel by pixel, mixed with brush strokes and other source imagery to create paintings with hundreds of layers. Cortright then works closely with a master printer in Brooklyn to layer these onto her various materials (aluminium, canvas, wood, etc). Petra is one of the most highly recognised digital and video artists of her generation.</p>
+  <p><strong>Petra Cortright</strong> (b.1986, Santa Barbara, California) is a Los Angeles based artist whose practice spans digital painting, video and online culture. Over the last 15 years Petra has been working in the format of digital painting. A unique process comprised of working with reference imagery that is then scanned and expanded pixel by pixel, mixed with brush strokes and other source imagery to create paintings with hundreds of layers. Cortright then works closely with a master printer in Brooklyn to layer these onto her various materials (aluminium, canvas, wood, etc). Petra is one of the most highly recognised digital and video artists of her generation.</p>
   <p>Her work has been exhibited internationally at many leading institutions including: Palm Springs Art Museum, Doota Plaza Seoul, LIMA, UTA Artist Space, University of Edinburgh, Depart Foundation LA, MoMA, Hammer Museum, Ludwig Museum Budapest, Walker Art Center, Halle für Kunst &amp; Medien Graz, Museum of Contemporary Art Chicago, Kunsthaus Langenthal, New Museum, 12th Biennale de Lyon, SJ01 Biennial San Jose, Whitechapel Gallery London, Zeughaus Teufen Switzerland, Frieze London, Art Basel's Unlimited and Parcours, and the Venice Biennale.</p>
   <p>Public collections include: The Bass Museum of Art, Berkeley Art Museum and Pacific Film Archive, Crystal Bridges Museum of American Art, Denver Art Museum, Getty Research Institute, Hammer Museum, Kadist Foundation, The Knoxville Museum of Art, LACMA, Moderna Museet Stockholm, MoMA, Museum of Contemporary Art Chicago, MOCA LA, Stedelijk Museum, Pérez Art Museum, Rhizome Net Art Anthology, San Jose Museum of Art, and Santa Barbara Museum of Art.</p>
   <p>Notable solo gallery exhibitions include: Team Gallery (New York), Société (Berlin), Carl Kostyál (London and Stockholm), Ever Gold [Projects] (San Francisco), Foxy Production (New York), Interval (London), 1301PE (LA), Brigade Gallery (Copenhagen), Duarte Sequeira (Braga, Portugal), von ammon co. (Washington D.C.), Danziger Gallery (New York), and online with Verse, Vortic and Daata, The Bass Museum (Miami) and Jodhpur Art Week (India).</p>

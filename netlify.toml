@@ -28,6 +28,15 @@
   path = "/visit/*"
   function = "visit"
 
+# Exhibitions live in the page as sections reached by a hash, which a
+# browser can show but a preview card and a search engine cannot. The
+# edge function serves the same page with each show's own title,
+# description and photograph in the head, the same treatment events and
+# Visit already have. The old #<slug> links go on working.
+[[edge_functions]]
+  path = "/exhibitions/*"
+  function = "exhibition"
+
 # Photographs are written once under a name that includes the exhibition,
 # and are replaced by adding a new file rather than overwriting an old one.
 # Netlify's default is "max-age=0, must-revalidate", which made a returning
@@ -49,6 +58,19 @@
   [headers.values]
     X-Content-Type-Options = "nosniff"
     Referrer-Policy = "strict-origin-when-cross-origin"
+    X-Frame-Options = "DENY"
+    # base-uri is 'self', not 'none': the event/visit/exhibition edge
+    # functions inject <base href="/"> so a page served from a deeper
+    # path still resolves its assets from the root. 'none' would block
+    # that tag and break every image on those pages. Typekit's kit CSS
+    # is on use.typekit.net and @imports p.typekit.net/p.css (a
+    # stylesheet), and the font files load from both hosts, so both
+    # appear in style-src and font-src. Event photographs and the
+    # events/RSVP API are on interval-desk.netlify.app (img-src and
+    # connect-src). The Visit street plan is a self-drawn inline SVG
+    # fetched from our own /assets, so no map-tile host is needed.
+    Content-Security-Policy = "default-src 'self'; script-src 'self' 'unsafe-inline'; style-src 'self' 'unsafe-inline' https://use.typekit.net https://p.typekit.net; font-src https://use.typekit.net https://p.typekit.net; img-src 'self' https://interval-desk.netlify.app data:; connect-src 'self' https://interval-desk.netlify.app; frame-ancestors 'none'; base-uri 'self'; object-src 'none'"
+    Permissions-Policy = "geolocation=(), microphone=(), camera=()"
 
 # The calendar file a guest downloads should carry the gallery's own
 # domain, not the hosting company's. The events edge function passes

@@ -114,6 +114,7 @@ function headFor(ev) {
 function stripSiteHead(html) {
   return html
     .replace(/<title>[\s\S]*?<\/title>\s*/i, "")
+    .replace(/<link\s+rel="canonical"[^>]*>\s*/gi, "")
     .replace(/<meta\s+property="og:(?:type|url|title|description|image(?::width|:height)?)"[^>]*>\s*/gi, "")
     .replace(/<meta\s+name="(?:description|twitter:card|twitter:title|twitter:description|twitter:image)"[^>]*>\s*/gi, "");
 }
