@@ -200,6 +200,9 @@
   [data-page="home"] .hero-img img{width:100%;height:auto;display:block}
   [data-page="home"] .hero-cap{text-align:center;font-size:clamp(12px,1.5vw,14px);line-height:2.2;max-width:720px;margin:0 auto}
   [data-page="home"] .ml{display:block;text-align:center;margin:clamp(48px,8vw,96px) auto 0;font-size:13px;color:#111;text-decoration:underline;text-underline-offset:4px}
+  /* Press sits under the mailing list link as the foot of the page, close
+     enough to read as one pair rather than another full gap below. */
+  [data-page="home"] .ml+.ml{margin-top:14px}
   .list{max-width:540px;margin:0 auto;display:flex;flex-direction:column;gap:clamp(40px,5vw,60px)}
   .list a img,.list .item img{width:100%;margin-bottom:14px}
   .list a div,.list .item div{font-size:13px;line-height:1.5}
@@ -470,6 +473,7 @@
     24th September – 19th December 2026
   </div>
   <a href="#mailing-list" class="ml">Join our Mailing List</a>
+  <a href="#press" class="ml">Press</a>
 </section>
 
 <article data-page="the-shudder">
