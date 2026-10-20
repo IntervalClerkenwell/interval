@@ -65,9 +65,7 @@ const SHOWS = {
   "the-shudder": {
     title: "The Shudder",
     desc: "24th September – 19th December 2026 · Featuring Lewis Brander, Jane Bustin, Edwina Leapman, Gal Schindler and Richard Serra.",
-    image: "/assets/exhibitions/the-shudder/the-shudder.jpg",
-    /* No article of its own: it is shown in the Upcoming list. */
-    route: "upcoming"
+    image: "/assets/exhibitions/the-shudder/the-shudder-installation-view.jpg"
   }
 };
 
