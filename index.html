@@ -284,6 +284,34 @@
   .lb-count{position:absolute;bottom:22px;left:0;right:0;text-align:center;color:#faf8f3;font-size:12px;letter-spacing:.12em;opacity:.7;font-family:inherit}
   main article:not(.contact):not(.about):not(.signup) img{cursor:zoom-in}
 
+  /* ---- Press ------------------------------------------------------- */
+  /* Each piece is a tile: its share picture, or failing that the
+     publication's name set in the site's own type rather than its logo,
+     so the page asks nobody's server for anything. A tile opens the
+     article itself, in a new tab, so the visitor keeps their place. */
+  .press{max-width:880px;margin:0 auto;display:grid;grid-template-columns:repeat(4,1fr);gap:clamp(28px,3.5vw,44px) clamp(18px,2.5vw,28px)}
+  .press a{display:block}
+  .press a:hover{opacity:1}
+  .press .mark{aspect-ratio:1;display:flex;align-items:center;justify-content:center;text-align:center;
+    padding:14px;margin-bottom:14px;background:#f2eee5;border:1px solid #e4dfd3;color:#111;
+    font-size:clamp(15px,1.8vw,19px);line-height:1.25;letter-spacing:.06em;
+    transition:background .2s ease,color .2s ease,border-color .2s ease}
+  .press a:hover .mark,.press a:focus-visible .mark{background:#111;border-color:#111;color:#faf8f3}
+  /* Where a piece has a share picture of its own, that is the tile: the
+     same picture the link shows when it is sent, saved here at 800px
+     because the security policy only lets this site show its own images.
+     Where the piece has none of Interval, one of the gallery's own
+     photographs from the show on at the time stands in.
+     The alt is empty because the headline beneath already says it. */
+  .press img.mark{width:100%;height:auto;object-fit:cover;padding:0;border:0;transition:opacity .2s ease}
+  .press a:hover img.mark{opacity:.8}
+  .press .mark.caps{text-transform:uppercase;letter-spacing:.2em;font-size:clamp(13px,1.5vw,16px)}
+  .press .mark.bold{font-weight:700;letter-spacing:.12em;font-size:clamp(22px,2.6vw,28px)}
+  .press .mark.ital{font-style:italic;letter-spacing:.03em}
+  .press .t{font-size:13px;line-height:1.5}
+  .press .w{font-size:12px;line-height:1.5;color:#6b6760;margin-top:4px}
+  @media(max-width:720px){.press{grid-template-columns:1fr 1fr}}
+
   /* ---- Visit -------------------------------------------------------- */
   /* Three sections off one array: Galleries, Restaurants, Culture. The
      street plan is drawn, not embedded, so it carries the site's own type
@@ -417,6 +445,7 @@
       </ul>
     </div>
     <a href="#about">About</a>
+    <a href="#press">Press</a>
     <a href="#contact">Contact</a>
     <div class="dd"><button type="button" aria-expanded="false">Visit</button>
       <ul>
@@ -660,6 +689,46 @@
   <p>Interval does not formally represent artists, which gives the gallery a certain freedom in how exhibitions are built and who it chooses to work with. Alongside the exhibition programme, Interval offers advisory and consulting services, working with collectors, institutions and estates on acquisitions, sales and curatorial projects across both the contemporary and historic markets.</p>
   <p>For any enquiries, or to visit the space, please get in touch at <a href="mailto:jacob@interval-clerkenwell.art">jacob@interval-clerkenwell.art</a>.</p>
 </article>
+
+<!-- Press. Newest first. To add a piece, copy a tile: the link, then
+     either its share picture saved in assets/press/ as an img.mark, or
+     the publication's name in div.mark (add caps, bold or ital to suit
+     its masthead), the headline in .t and publication and date in .w. -->
+<section data-page="press">
+  <h1 class="sr-only">Press</h1>
+  <div class="press">
+    <a href="https://www.nytimes.com/2026/10/16/arts/design/frieze-london-small-galleries.html" target="_blank" rel="noopener">
+      <img class="mark" src="assets/exhibitions/the-shudder/the-shudder.jpg" alt="" width="800" height="800" loading="lazy" decoding="async">
+      <div class="t">As Big Money Flees London’s Art Scene, Young Galleries Sharpen Their Edge</div>
+      <div class="w">The New York Times, October 2026<span class="sr-only"> (opens in a new tab)</span></div>
+    </a>
+    <a href="https://www.standard.co.uk/culture/exhibitions/best-independent-art-galleries-london-b1293403.html" target="_blank" rel="noopener">
+      <img class="mark" src="assets/exhibitions/interval-one/interval-one-2.jpg" alt="" width="800" height="800" loading="lazy" decoding="async">
+      <div class="t">The 8 best independent and alternative art galleries in London</div>
+      <div class="w">The Standard, August 2026<span class="sr-only"> (opens in a new tab)</span></div>
+    </a>
+    <a href="https://fadmagazine.com/2026/06/29/interval-one-launch-scarlet-topley-ed-ruscha/" target="_blank" rel="noopener">
+      <img class="mark" src="assets/press/fad.jpg" alt="" width="800" height="800" loading="lazy" decoding="async">
+      <div class="t">Interval launches annual exhibition programme pairing emerging artists with art history</div>
+      <div class="w">FAD Magazine, June 2026<span class="sr-only"> (opens in a new tab)</span></div>
+    </a>
+    <a href="https://oliverspencer.co.uk/blogs/journal/in-conversation-david-and-jacob-gryn-of-interval" target="_blank" rel="noopener">
+      <img class="mark" src="assets/press/oliver-spencer.jpg" alt="" width="800" height="800" loading="lazy" decoding="async">
+      <div class="t">In Conversation: David and Jacob Gryn of Interval</div>
+      <div class="w">Oliver Spencer Journal, June 2026<span class="sr-only"> (opens in a new tab)</span></div>
+    </a>
+    <a href="https://artlyst.com/lustre-sebastian-espejo-pierre-bonnard-interval-gallery-nico-kos-earle/" target="_blank" rel="noopener">
+      <img class="mark" src="assets/press/artlyst.jpg" alt="" width="800" height="800" loading="lazy" decoding="async">
+      <div class="t">Lustre: Sebastián Espejo &amp; Pierre Bonnard, Interval Gallery</div>
+      <div class="w">Artlyst, Nico Kos Earle, February 2026<span class="sr-only"> (opens in a new tab)</span></div>
+    </a>
+    <a href="https://plastermagazine.com/interviews/interval-gallery-clerkenwell-profile/" target="_blank" rel="noopener">
+      <img class="mark" src="assets/press/plaster.jpg" alt="" width="800" height="800" loading="lazy" decoding="async">
+      <div class="t">Interval Gallery is here to break art world bad habits</div>
+      <div class="w">Plaster Magazine, November 2025<span class="sr-only"> (opens in a new tab)</span></div>
+    </a>
+  </div>
+</section>
 
 <article data-page="contact" class="contact">
   <p>Interval<br>73 Compton Street<br>London, EC1V 0BN</p>
