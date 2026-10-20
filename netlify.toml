@@ -28,6 +28,12 @@
   path = "/visit/*"
   function = "visit"
 
+# Press gets a real address too, so the sitemap can name it: a search
+# engine reads /#press as the homepage.
+[[edge_functions]]
+  path = "/press"
+  function = "press"
+
 # Exhibitions live in the page as sections reached by a hash, which a
 # browser can show but a preview card and a search engine cannot. The
 # edge function serves the same page with each show's own title,
