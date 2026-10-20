@@ -1253,6 +1253,7 @@ var G=[{n:"Interval",a:"73 Compton Street, EC1V 0BN",h:"Wed \u2013 Sat, 12 \u201
 {n:"St Bartholomew the Great",a:"West Smithfield, EC1A 9DS",h:"Mon \u2013 Fri, 8.30 \u2013 5 \u00b7 Sat, 10.30 \u2013 4",d:739,x:1043,y:854,s:"c",u:"https://www.greatstbarts.com/",i:1},
 {n:"Sasa Sushi",a:"422 St John Street, EC1V 4NJ",h:"Japanese",d:804,x:906,y:36,s:"r",u:"https://www.sasasushi.co.uk/"},
 {n:"Barbican Art Gallery",a:"Silk Street, EC2Y 8DS",h:"Tue \u2013 Sun, 10 \u2013 6 \u00b7 Thu \u2013 Fri to 8",d:825,x:1410,y:678,s:"c",u:"https://www.barbican.org.uk/",i:1},
+{n:"Flexitron",a:"46 Penton Street, N1 9QA",h:"By appointment only",d:1100,x:698,y:-45,s:"g",u:"https://flexitrongallery.com/"},
 {n:"The Perimeter",a:"20 Brownlow Mews, WC1N 2LE",h:"Wed \u2013 Sat, 11 \u2013 5",d:918,x:533,y:494,s:"g",u:"https://www.theperimeter.co.uk/"},
 {n:"Galerina",a:"1 Guilford Street, WC1N 1DR",h:"",d:927,x:515,y:458,s:"g",u:"https://galerina.net/"},
 {n:"Brunette Coleman",a:"42 Theobalds Road, WC1X 8NW",h:"Wed \u2013 Sat, 12 \u2013 6",d:1002,x:522,y:664,s:"g",u:"https://www.brunettecoleman.com/"},
@@ -1301,6 +1302,7 @@ var G=[{n:"Interval",a:"73 Compton Street, EC1V 0BN",h:"Wed \u2013 Sat, 12 \u201
     var pc=g.a.replace(/.*,\s*/,'');
     return /^EC4/.test(pc)?'Fleet Street and Blackfriars'
          : /^WC/.test(pc) ?'Bloomsbury and Holborn'
+         : /^N1\b/.test(pc)?'Angel and Pentonville'
          : 'Clerkenwell and Farringdon';
   }
   /* Distance alone interleaves the districts, which made the same heading
@@ -1352,10 +1354,11 @@ var G=[{n:"Interval",a:"73 Compton Street, EC1V 0BN",h:"Wed \u2013 Sat, 12 \u201
     if(layer)layer.textContent='';
     rows.textContent='';sr.textContent='';
     current=grouped(G.filter(function(g){return g.s===sec||g.me}));
-    /* Headings earn their place only when every group is a group. */
-    var tally={};current.forEach(function(g){var a=areaOf(g);tally[a]=(tally[a]||0)+1});
+    /* Headings earn their place only when every group holds somewhere to go,
+       not Interval alone. A single gallery is still a district worth naming. */
+    var tally={};current.forEach(function(g){var a=areaOf(g);tally[a]=(tally[a]||0)+(g.me?0:1)});
     var areas=Object.keys(tally),
-        heads=areas.length>1&&areas.every(function(a){return tally[a]>1}),last=null;
+        heads=areas.length>1&&areas.every(function(a){return tally[a]>0}),last=null;
     current.forEach(function(g,i){
       var num=i+1,inst=g.i&&!g.me;
       if(layer){
