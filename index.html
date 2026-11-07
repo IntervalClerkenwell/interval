@@ -375,7 +375,6 @@
     margin-right:7px;vertical-align:-1px}
   .v-legend .fill{background:#111}
   .v-legend .ring2{box-shadow:0 0 0 2px #faf8f3,0 0 0 3px #111}
-  .v-legend .cue{color:#7d5a3c}
 
   .v-list{list-style:none}
   .v-head,.v-list li{display:grid;
@@ -418,10 +417,10 @@
   }
   @media(max-width:720px){
     #v-plan .lbl{display:none}
-    #v-plan .pin circle.dot{r:22px;stroke-width:2.4}
-    #v-plan .pin .ring{r:29px;stroke-width:1.6}
-    #v-plan .pin .halo{r:34px}
-    #v-plan .pin text.num{font-size:24px}
+    #v-plan .pin circle.dot{r:24px;stroke-width:2.6}
+    #v-plan .pin .ring{r:31px;stroke-width:1.6}
+    #v-plan .pin .halo{r:36px}
+    #v-plan .pin text.num{font-size:26px}
     #v-plan .pin.home .tag{font-size:21px;letter-spacing:2px}
     .v-wrap{overflow:visible}
     .v-card{position:static;width:auto;margin-top:13px;padding:13px 2px 0;border:0;
@@ -811,7 +810,6 @@
         <span><i class="fill"></i>Interval</span>
         <span id="v-leg-a"><i></i><span id="v-leg-a-l">Galleries</span></span>
         <span id="v-leg-b" hidden><i class="ring2"></i>Museums</span>
-        <span class="cue">Hover a number, or tap it</span>
       </div>
       <ol class="sr-only" id="v-sr"></ol>
     </div>
@@ -829,6 +827,7 @@
 
   <div class="v-foot">
     <hr>
+    <b>Interval</b><br>
     <b>Wed &ndash; Sat, 12pm &ndash; 6pm</b><br>or by appointment<br><br>
     Farringdon 8 min &middot; Barbican 8 min &middot; Angel 12 min<br><br>
     <b>info@interval-clerkenwell.art</b>
@@ -1327,6 +1326,7 @@ var G=[{n:"Interval",a:"73 Compton Street, EC1V 0BN",h:"Wed \u2013 Sat, 12 \u201
 {n:"Sasa Sushi",a:"422 St John Street, EC1V 4NJ",h:"Japanese",d:804,x:906,y:36,s:"r",u:"https://www.sasasushi.co.uk/"},
 {n:"Barbican Art Gallery",a:"Silk Street, EC2Y 8DS",h:"Tue \u2013 Sun, 10 \u2013 6 \u00b7 Thu \u2013 Fri to 8",d:825,x:1410,y:678,s:"c",u:"https://www.barbican.org.uk/",i:1},
 {n:"Flexitron",a:"46 Penton Street, N1 9QA",h:"By appointment only",d:1100,x:698,y:-45,s:"g",u:"https://flexitrongallery.com/"},
+{n:"domobaal",a:"3 John Street, WC1N 2ES",h:"Thu \u2013 Sat, 12 \u2013 6, by appointment",d:916,x:573,y:634,s:"g",u:"https://www.domobaal.com/"},
 {n:"The Perimeter",a:"20 Brownlow Mews, WC1N 2LE",h:"Wed \u2013 Sat, 11 \u2013 5",d:918,x:533,y:494,s:"g",u:"https://www.theperimeter.co.uk/"},
 {n:"Galerina",a:"1 Guilford Street, WC1N 1DR",h:"",d:927,x:515,y:458,s:"g",u:"https://galerina.net/"},
 {n:"Brunette Coleman",a:"42 Theobalds Road, WC1X 8NW",h:"Wed \u2013 Sat, 12 \u2013 6",d:1002,x:522,y:664,s:"g",u:"https://www.brunettecoleman.com/"},
@@ -1337,9 +1337,11 @@ var G=[{n:"Interval",a:"73 Compton Street, EC1V 0BN",h:"Wed \u2013 Sat, 12 \u201
 {n:"Sir John Soane's Museum",a:"13 Lincoln's Inn Fields, WC2A 3BP",h:"Wed \u2013 Sun, 10 \u2013 5",d:1312,x:469,y:899,s:"c",u:"https://www.soane.org/",i:1},
 {n:"Vendelmans",a:"1st Floor, 240 High Holborn, WC1V 7DN",h:"Thu \u2013 Fri, 12 \u2013 6 \u00b7 Sat by appointment",d:1362,x:414,y:870,s:"g",u:"https://www.vendelmans.com/"},
 {n:"Pusher",a:"64 Lincoln's Inn Fields, WC2A 3JX",h:"Wed \u2013 Sat, 12 \u2013 6",d:1445,x:419,y:952,s:"g",u:"https://pusher.ink/"},
+{n:"Herald St | Museum St",a:"43 Museum Street, WC1A 1LY",h:"Tue \u2013 Sat, 11 \u2013 6",d:1759,x:181,y:870,s:"g",u:"https://heraldst.com/"},
 {n:"British Museum",a:"Great Russell Street, WC1B 3DG",h:"Daily, 10 \u2013 5 \u00b7 Fri to 8.30",d:1788,x:133,y:837,s:"c",u:"https://www.britishmuseum.org/",i:1},
-{n:"Union Pacific",a:"15 West Central Street, WC1A 1JJ",h:"Tue \u2013 Sat, 11 \u2013 6",d:1789,x:177,y:926,s:"g",u:"https://www.unionpacific.co.uk/"},
-{n:"Isaac Benigson Old and Interesting Art",a:"44 Great Russell Street, WC1B 3JL",h:"Tue \u2013 Sat, 12 \u2013 5.30",d:1790,x:136,y:844,s:"g",u:"https://isaacbenigson.com/"}];
+{n:"Union Pacific",a:"15 West Central Street, WC1A 1JJ",h:"Tue \u2013 Sat, 11 \u2013 6",d:1789,x:180,y:927,s:"g",u:"https://www.unionpacific.co.uk/"},
+{n:"Isaac Benigson Old and Interesting Art",a:"44 Great Russell Street, WC1B 3JL",h:"Tue \u2013 Sat, 12 \u2013 5.30",d:1790,x:132,y:841,s:"g",u:"https://isaacbenigson.com/"},
+{n:"Phillida Reid",a:"10\u201316 Grape Street, WC2H 8DY",h:"Tue \u2013 Sat, 11 \u2013 6",d:1852,x:150,y:976,s:"g",u:"https://www.phillidareid.com/"}];
 
   G.forEach(function(g){
     /* g.d is straight-line. Streets are not, and this is Clerkenwell: the
@@ -1524,7 +1526,9 @@ var G=[{n:"Interval",a:"73 Compton Street, EC1V 0BN",h:"Wed \u2013 Sat, 12 \u201
   }
   window.__visit=route;
   setSection('g');
-  setView(narrow()?'list':'map');
+  /* A phone opens on the map too, with the bigger numbers above; the
+     button still gets you to the list. */
+  setView('map');
 })();
 </script>
 
