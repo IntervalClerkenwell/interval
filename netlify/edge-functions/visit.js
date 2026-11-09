@@ -1,6 +1,6 @@
 /* ------------------------------------------------------------------
    Real addresses for the Visit page: /visit, /visit/restaurants,
-   /visit/culture.
+   /visit/pubs, /visit/culture.
 
    The one page on the site with genuine search pull — somebody looking
    for galleries near Clerkenwell — lived only behind a hash, which a
@@ -33,6 +33,12 @@ const SECTIONS = {
     title: "Restaurants near Interval, Clerkenwell",
     desc: "Where to eat and drink around Interval in Clerkenwell: restaurants, bars and cafes " +
           "near 73 Compton Street, with addresses and walking times."
+  },
+  pubs: {
+    path: "/visit/pubs",
+    title: "Pubs near Interval, Clerkenwell",
+    desc: "Pubs within a short walk of Interval at 73 Compton Street, Clerkenwell, " +
+          "from the Sekforde round the corner to Ye Olde Mitre, with addresses and walking times."
   },
   culture: {
     path: "/visit/culture",

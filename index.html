@@ -453,6 +453,7 @@
       <ul>
         <li><a href="/visit">Galleries</a></li>
         <li><a href="/visit/restaurants">Restaurants</a></li>
+        <li><a href="/visit/pubs">Pubs</a></li>
         <li><a href="/visit/culture">Culture</a></li>
       </ul>
     </div>
@@ -847,7 +848,7 @@
      itself, because moving between its sections rewrites the address
      with pushState and __route only ever says where the page began. */
   const pathRoute=()=>{
-    const m=/^\/visit(?:\/(galleries|restaurants|culture))?\/?$/.exec(location.pathname);
+    const m=/^\/visit(?:\/(galleries|restaurants|pubs|culture))?\/?$/.exec(location.pathname);
     return m?'visit-'+(m[1]||'galleries'):'';
   };
   const go=()=>{
@@ -1278,19 +1279,19 @@
 })();
 </script>
 <script>
-/* The Visit page: Galleries, Restaurants and Culture, three sets off one
-   array, each on its own crop of the same drawn street plan. The plan is
+/* The Visit page: Galleries, Restaurants, Pubs and Culture, four sets off
+   one array, each on its own crop of the same drawn street plan. The plan is
    126 KB and lives in assets/visit/, fetched the first time somebody opens
    this page rather than sitting in index.html where every visitor to every
    page would pay for it. */
 (function(){
   var PLAN='assets/visit/clerkenwell-2026-08-26.svg';
-  var SEC={g:'galleries',r:'restaurants',c:'culture'};
-  var COPY={g:'Galleries near us',r:'Restaurants near us',c:'Culture near us'};
+  var SEC={g:'galleries',r:'restaurants',p:'pubs',c:'culture'};
+  var COPY={g:'Galleries near us',r:'Restaurants near us',p:'Pubs near us',c:'Culture near us'};
   /* a restaurant's opening times are the most volatile thing about it and
      the least useful; what kind of place it is lasts */
   var COLS={g:['Gallery','Hours','Galleries'],r:['Restaurant','Kind','Restaurants'],
-            c:['Museum','Hours',null]};
+            p:['Pub','Kind','Pubs'],c:['Museum','Hours',null]};
 
 var G=[{n:"Interval",a:"73 Compton Street, EC1V 0BN",h:"Wed \u2013 Sat, 12 \u2013 6",d:0,x:1023,y:455,s:"g",me:1},
 {n:"Dragonfly Cafe",a:"71 Compton Street, EC1V 0BN",h:"Vietnamese",d:9,x:1063,y:456,s:"r",u:"https://www.dragonflycafe.uk/"},
@@ -1323,6 +1324,17 @@ var G=[{n:"Interval",a:"73 Compton Street, EC1V 0BN",h:"Wed \u2013 Sat, 12 \u201
 {n:"Quentin Blake Centre for Illustration",a:"28 Amwell Street, EC1R 1UN",h:"Wed \u2013 Sun, 10 \u2013 5",d:667,x:760,y:207,s:"c",u:"https://qbcentre.org.uk/",i:1},
 {n:"Restaurant St Barts",a:"63 Bartholomew Close, EC1A 7BF",h:"British, tasting menu",d:723,x:1165,y:819,s:"r",u:"https://restaurant-stbarts.co.uk/"},
 {n:"St Bartholomew the Great",a:"West Smithfield, EC1A 9DS",h:"Mon \u2013 Fri, 8.30 \u2013 5 \u00b7 Sat, 10.30 \u2013 4",d:739,x:1043,y:854,s:"c",u:"https://www.greatstbarts.com/",i:1},
+{n:"The Sekforde",a:"34 Sekforde Street, EC1R 0HA",h:"Pub and dining room",d:131,x:958,y:482,s:"p",u:"https://www.thesekforde.com/"},
+{n:"The Slaughtered Lamb",a:"34\u201335 Great Sutton Street, EC1V 0DX",h:"Pub, music downstairs",d:158,x:1072,y:524,s:"p",u:"https://www.theslaughteredlambpub.com/"},
+{n:"The George and Dragon",a:"240 St John Street, EC1V 4PH",h:"Pub",d:178,x:1004,y:359,s:"p",u:"https://georgeanddragonlondon.com/"},
+{n:"The Crown Tavern",a:"43 Clerkenwell Green, EC1R 0EG",h:"Pub",d:216,x:931,y:527,s:"p",u:"https://thecrowntavernec1.co.uk/"},
+{n:"The Sutton Arms",a:"6 Great Sutton Street, EC1V 0BX",h:"Pub",d:226,x:1131,y:509,s:"p"},
+{n:"The Holy Tavern",a:"55 Britton Street, EC1M 5UQ",h:"Pub",d:319,x:977,y:622,s:"p",u:"https://www.instagram.com/theholytavern/"},
+{n:"The White Bear",a:"57 St John Street, EC1M 4AN",h:"Pub",d:371,x:1058,y:652,s:"p",u:"https://www.whitebearfarringdon.com/"},
+{n:"The Fox and Anchor",a:"115 Charterhouse Street, EC1M 6AA",h:"Pub with rooms",d:458,x:1100,y:689,s:"p",u:"https://www.foxandanchor.com/"},
+{n:"The Exmouth Arms",a:"23 Exmouth Market, EC1R 4QL",h:"Pub",d:469,x:791,y:358,s:"p",u:"https://www.exmoutharms.com/"},
+{n:"The Horses",a:"26\u201328 Ray Street, EC1R 3DJ",h:"Pub and restaurant",d:470,x:783,y:540,s:"p",u:"https://www.thehorsesec1.com/"},
+{n:"Ye Olde Mitre",a:"1 Ely Court, EC1N 6SJ",h:"Historic pub",d:739,x:847,y:819,s:"p",u:"https://yeoldemitreholborn.co.uk/"},
 {n:"Sasa Sushi",a:"422 St John Street, EC1V 4NJ",h:"Japanese",d:804,x:906,y:36,s:"r",u:"https://www.sasasushi.co.uk/"},
 {n:"Barbican Art Gallery",a:"Silk Street, EC2Y 8DS",h:"Tue \u2013 Sun, 10 \u2013 6 \u00b7 Thu \u2013 Fri to 8",d:825,x:1410,y:678,s:"c",u:"https://www.barbican.org.uk/",i:1},
 {n:"Flexitron",a:"46 Penton Street, N1 9QA",h:"By appointment only",d:1100,x:698,y:-45,s:"g",u:"https://flexitrongallery.com/"},
@@ -1371,7 +1383,7 @@ var G=[{n:"Interval",a:"73 Compton Street, EC1V 0BN",h:"Wed \u2013 Sat, 12 \u201
     return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]})}
   function maps(g){return 'https://www.google.com/maps/search/?api=1&query='+
     encodeURIComponent(g.n+', '+g.a+', London')}
-  function cell(g){return (g.me&&sec==='r')?'Gallery':g.h}
+  function cell(g){return (g.me&&(sec==='r'||sec==='p'))?'Gallery':g.h}
   function areaOf(g){
     if(g.s==='c'&&!g.me)return 'Museums and institutions';
     var pc=g.a.replace(/.*,\s*/,'');
