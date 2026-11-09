@@ -84,11 +84,28 @@ function describe(ev) {
   return out.slice(0, out.lastIndexOf(" ")).replace(/[,;:—-]$/, "") + "…";
 }
 
-function headFor(ev) {
+/* The Desk's "Copy link to send" adds ?p=, taken from the picture's id,
+   so a new picture is a new link and WhatsApp and Messages, which keep
+   a card against the address they first saw it at, draw a fresh one.
+   It changes nothing on the page. It is only checked for shape so it can
+   go back out in og:url, which is what Facebook's reader treats as the
+   address of the card; the canonical link stays plain for search. */
+const shareTag = (url) => {
+  const p = url.searchParams.get("p");
+  return p && /^[a-z0-9]{1,12}$/.test(p) ? p : "";
+};
+
+function headFor(ev, tag) {
   const url = SITE + "/events/" + ev.slug;
+  const cardUrl = tag ? url + "?p=" + tag : url;
   const title = [ev.title, "Interval"].join(" · ");
   const desc = describe(ev);
   const img = ev.image ? DESK + ev.image : SITE + "/assets/site/social-preview.jpg";
+  /* The size lets WhatsApp draw the large card the first time a link is
+     sent, instead of a small square until it has fetched the picture
+     itself. Only events whose picture went up after the Desk started
+     recording sizes have one; the rest go without, as before. */
+  const sized = ev.image && ev.imageWidth > 0 && ev.imageHeight > 0;
 
   return [
     /* Every URL in the page is written relative to the root, and this
@@ -98,15 +115,19 @@ function headFor(ev) {
     `<link rel="canonical" href="${esc(url)}">`,
     `<meta name="description" content="${esc(desc)}">`,
     `<meta property="og:type" content="article">`,
-    `<meta property="og:url" content="${esc(url)}">`,
+    `<meta property="og:url" content="${esc(cardUrl)}">`,
     `<meta property="og:title" content="${esc(ev.title)}">`,
     `<meta property="og:description" content="${esc(desc)}">`,
     `<meta property="og:image" content="${esc(img)}">`,
+    `<meta property="og:image:type" content="image/jpeg">`,
+    sized ? `<meta property="og:image:width" content="${ev.imageWidth | 0}">` : "",
+    sized ? `<meta property="og:image:height" content="${ev.imageHeight | 0}">` : "",
+    ev.image && ev.imageAlt ? `<meta property="og:image:alt" content="${esc(ev.imageAlt)}">` : "",
     `<meta name="twitter:card" content="summary_large_image">`,
     `<meta name="twitter:title" content="${esc(ev.title)}">`,
     `<meta name="twitter:description" content="${esc(desc)}">`,
     `<meta name="twitter:image" content="${esc(img)}">`
-  ].join("\n");
+  ].filter(Boolean).join("\n");
 }
 
 /* The head already carries a set of these for the site as a whole.
@@ -120,7 +141,9 @@ function stripSiteHead(html) {
 }
 
 export default async (request, context) => {
-  const { pathname } = new URL(request.url);
+  const reqUrl = new URL(request.url);
+  const { pathname } = reqUrl;
+  const tag = shareTag(reqUrl);
   const m = /^\/events\/([a-z0-9][a-z0-9-]{1,47})\/?$/.exec(pathname);
   const isList = /^\/events\/?$/.test(pathname);
   if (!m && !isList) return context.next();
@@ -158,7 +181,13 @@ export default async (request, context) => {
 
   if (m) {
     route = "event-" + m[1];
-    list = await feed(READS_PAGES.test(request.headers.get("user-agent") || ""));
+    /* A link copied from the Desk is always waited for, whoever is
+       reading it. It is the link that gets sent, and not every app that
+       draws a card from it says so in its user agent; one that slipped
+       past READS_PAGES and was cut off at PATIENCE got the site's own
+       photograph instead of the event's. The feed is cached at the
+       edge, so a person tapping the same link waits a moment at most. */
+    list = await feed(!!tag || READS_PAGES.test(request.headers.get("user-agent") || ""));
     if (list) ev = list.find((x) => x.slug === m[1]) || null;
     /* If it came back with nothing the page says so itself, in its own
        words, once it has asked for the list a second time. */
@@ -167,7 +196,7 @@ export default async (request, context) => {
   /* Order matters: the site's own tags come out before the event's go
      in, or the strip would take the new ones straight back out. */
   const inject =
-    (ev ? headFor(ev) : `<base href="/">`) +
+    (ev ? headFor(ev, tag) : `<base href="/">`) +
     `\n<script>window.__route=${JSON.stringify(route)}</script>\n</head>`;
 
   let out = (ev ? stripSiteHead(html) : html).replace("</head>", inject);
